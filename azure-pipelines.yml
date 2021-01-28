@@ -83,14 +83,14 @@ stages:
             inputs:
               restoreSolution: '**\*.sln'
               feedsToUse: config
-              nugetConfigPath: src/.nuget/NuGet.Config
+              nugetConfigPath: ./NuGet.Config
               restoreDirectory: ../lib/packages
 
           # Build solution
           - task: VSBuild@1
             displayName: Build solution
             inputs:
-              solution: src/Enterspeed.Sdk.sln
+              solution: ./Enterspeed.Sdk.sln
               msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\" /p:AutoParameterizationWebConfigConnectionStrings=false /p:MarkWebConfigAssistFilesAsExclude=false /p:IncludeSetAclProviderOnDestination=False'
               platform: Any CPU
               configuration: Release
