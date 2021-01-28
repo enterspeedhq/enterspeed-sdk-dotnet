@@ -91,7 +91,6 @@ stages:
             displayName: Build solution
             inputs:
               solution: ./Enterspeed.Sdk.sln
-              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\" /p:AutoParameterizationWebConfigConnectionStrings=false /p:MarkWebConfigAssistFilesAsExclude=false /p:IncludeSetAclProviderOnDestination=False'
               platform: Any CPU
               configuration: Release
               maximumCpuCount: true
