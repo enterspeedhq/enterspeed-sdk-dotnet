@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>Enterspeed.Source.Sdk</PackageId>
+    <Authors>Enterspeed</Authors>
+    <Description>.NET SDK for interacting with Enterspeed Ingest API.</Description>
+    <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
