@@ -15,7 +15,7 @@ The connection for Enterspeed.
 
 ## [Enterspeed Configuration](./configuration/README.md)
 
-Configuration for to establish a connection.
+Configuration to establish a connection.
 
 ## [Enterspeed Configuration Service](./services/enterspeed-configuration-service/README.md)
 

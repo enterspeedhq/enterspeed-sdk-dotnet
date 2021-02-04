@@ -3,8 +3,8 @@
 The Enterspeed Connection simply establishes and maintains
 a connection to the configured Enterspeed endpoint.
 
-For the connection to work, 2 configuration settings  
-in the [EnterspeedConfiguration](./../configuration/README.md) _must_ be set:
+For the connection to work, 2 configuration settings in the
+[EnterspeedConfiguration](./../configuration/README.md) _must_ be set:
 
 * ApiKey
 * BaseUrl

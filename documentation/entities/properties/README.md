@@ -1,7 +1,7 @@
 # IEnterspeedProperty
 
 IEnterspeed property is the interface used for all types
-of converted properties that Enterspeed can handle.  
+of properties that Enterspeed can handle.  
 
 ## Types of properties
 
