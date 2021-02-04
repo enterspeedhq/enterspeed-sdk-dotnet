@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Enterspeed.Source.Sdk.Api.Services;
 
-namespace Enterspeed.Source.Sdk.Domain.Client
+namespace Enterspeed.Source.Sdk.Domain.Connection
 {
     public class EnterspeedConnection
     {

@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.Sdk.Domain.Client;
+using Enterspeed.Source.Sdk.Domain.Connection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
