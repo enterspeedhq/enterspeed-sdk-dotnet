@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Net.Http;
-using Enterspeed.Source.Sdk.Api.Services;
+using Enterspeed.Source.Sdk.Api.Providers;
 
 namespace Enterspeed.Source.Sdk.Domain.Connection
 {
     public class EnterspeedConnection
     {
-        private readonly IEnterspeedConfigurationService _configurationService;
+        private readonly IEnterspeedConfigurationProvider _configurationProvider;
         private HttpClient _httpClientConnection;
         private DateTime? _connectionEstablishedDate;
 
-        public EnterspeedConnection(IEnterspeedConfigurationService configurationService)
+        public EnterspeedConnection(IEnterspeedConfigurationProvider configurationProvider)
         {
-            _configurationService = configurationService;
+            _configurationProvider = configurationProvider;
         }
 
-        public string ApiKey => _configurationService.GetConfiguration().ApiKey;
-        public string BaseUrl => _configurationService.GetConfiguration().BaseUrl;
-        public int ConnectionTimeout => _configurationService.GetConfiguration().ConnectionTimeout;
+        public string ApiKey => _configurationProvider.Configuration.ApiKey;
+        public string BaseUrl => _configurationProvider.Configuration.BaseUrl;
+        public int ConnectionTimeout => _configurationProvider.Configuration.ConnectionTimeout;
 
         public HttpClient HttpClientConnection
         {
