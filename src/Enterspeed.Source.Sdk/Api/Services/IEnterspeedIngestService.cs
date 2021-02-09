@@ -1,5 +1,5 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models;
-using Enterspeed.Source.Sdk.Domain.Client;
+using Enterspeed.Source.Sdk.Domain.Connection;
 
 namespace Enterspeed.Source.Sdk.Api.Services
 {

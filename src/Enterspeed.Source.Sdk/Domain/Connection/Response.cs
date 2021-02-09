@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Enterspeed.Source.Sdk.Domain.Client
+namespace Enterspeed.Source.Sdk.Domain.Connection
 {
     public class Response
     {
