@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net.Http;
+using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 
 namespace Enterspeed.Source.Sdk.Domain.Connection
 {
-    public class EnterspeedConnection
+    public class EnterspeedConnection : IEnterspeedConnection
     {
         private readonly IEnterspeedConfigurationProvider _configurationProvider;
         private HttpClient _httpClientConnection;
@@ -15,9 +16,9 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             _configurationProvider = configurationProvider;
         }
 
-        public string ApiKey => _configurationProvider.Configuration.ApiKey;
-        public string BaseUrl => _configurationProvider.Configuration.BaseUrl;
-        public int ConnectionTimeout => _configurationProvider.Configuration.ConnectionTimeout;
+        private string ApiKey => _configurationProvider.Configuration.ApiKey;
+        private string BaseUrl => _configurationProvider.Configuration.BaseUrl;
+        private int ConnectionTimeout => _configurationProvider.Configuration.ConnectionTimeout;
 
         public HttpClient HttpClientConnection
         {

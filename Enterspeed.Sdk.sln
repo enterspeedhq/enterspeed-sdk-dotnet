@@ -14,7 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.Sdk", "src\Enterspeed.Source.Sdk\Enterspeed.Source.Sdk.csproj", "{2B8A0676-CCC9-4509-8513-A8EDA01236F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.Sdk", "src\Enterspeed.Source.Sdk\Enterspeed.Source.Sdk.csproj", "{2B8A0676-CCC9-4509-8513-A8EDA01236F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5B9E36D0-71A7-4D21-A9E2-B812B40E90EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.Sdk.Tests", "tests\Enterspeed.Source.Sdk.Tests\Enterspeed.Source.Sdk.Tests.csproj", "{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,12 +30,17 @@ Global
 		{2B8A0676-CCC9-4509-8513-A8EDA01236F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B8A0676-CCC9-4509-8513-A8EDA01236F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B8A0676-CCC9-4509-8513-A8EDA01236F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2B8A0676-CCC9-4509-8513-A8EDA01236F3} = {6ACAB91D-6EBA-4CBA-811E-DA1A2B73A770}
+		{1F361FB5-ECA9-46B2-8BF1-FE1A1EF4D407} = {5B9E36D0-71A7-4D21-A9E2-B812B40E90EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
