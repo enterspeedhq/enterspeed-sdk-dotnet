@@ -1,4 +1,4 @@
-# EnterspeedConnection
+# Enterspeed Connection
 
 The Enterspeed Connection simply establishes and maintains
 a connection to the configured Enterspeed endpoint.
