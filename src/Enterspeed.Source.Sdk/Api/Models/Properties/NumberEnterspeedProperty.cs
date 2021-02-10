@@ -15,18 +15,20 @@ namespace Enterspeed.Source.Sdk.Api.Models.Properties
         {
             get
             {
-                if (!_precision.HasValue)
+                if (_precision.HasValue)
                 {
-                    var numberParts = Value.ToString("R", CultureInfo.InvariantCulture).Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
-                    if (numberParts.Length <= 1)
-                    {
-                        _precision = 0;
-                    }
-                    else
-                    {
-                        var decimalPart = numberParts[1];
-                        _precision = decimalPart.Length;
-                    }
+                    return _precision.Value;
+                }
+
+                var numberParts = Value.ToString("R", CultureInfo.InvariantCulture).Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+                if (numberParts.Length <= 1)
+                {
+                    _precision = 0;
+                }
+                else
+                {
+                    var decimalPart = numberParts[1];
+                    _precision = decimalPart.Length;
                 }
 
                 return _precision.Value;

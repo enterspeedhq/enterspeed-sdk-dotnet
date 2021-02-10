@@ -17,9 +17,9 @@ The connection for Enterspeed.
 
 Configuration to establish a connection.
 
-## [Enterspeed Configuration Service](./services/enterspeed-configuration-service/README.md)
+## [Enterspeed Configuration Provider](./providers/enterspeed-configuration-provider/README.md)
 
-Service to provide the Enterspeed Configuration.
+Provider to serve the EnterspeedConfiguration.
 
 ## [Enterspeed Ingest Service](./services/enterspeed-ingest-service/README.md)
 

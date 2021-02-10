@@ -1,4 +1,4 @@
-# EnterspeedConfiguration
+# Enterspeed Configuration
 
 |Name               | Type     |Description |
 |:----              | :-----   |:-----|

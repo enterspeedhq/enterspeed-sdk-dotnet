@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
@@ -13,9 +14,9 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 {
     public class EnterspeedIngestService : IEnterspeedIngestService
     {
-        private readonly EnterspeedConnection _connection;
+        private readonly IEnterspeedConnection _connection;
 
-        public EnterspeedIngestService(EnterspeedConnection connection)
+        public EnterspeedIngestService(IEnterspeedConnection connection)
         {
             _connection = connection;
         }
