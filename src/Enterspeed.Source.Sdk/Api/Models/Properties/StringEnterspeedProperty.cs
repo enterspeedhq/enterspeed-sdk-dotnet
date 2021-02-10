@@ -4,7 +4,7 @@
     {
         public string Name { get; }
         public string Type => "string";
-        public string Value { get; set; }
+        public string Value { get; }
 
         public StringEnterspeedProperty(string name, string value)
         {

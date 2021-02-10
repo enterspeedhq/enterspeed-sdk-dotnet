@@ -46,6 +46,7 @@ trigger:
     include:
       - master
       - release/*
+      - feature/*
   paths:
     exclude:
       - README.md
@@ -57,6 +58,7 @@ pr:
     include:
       - master
       - release/*
+      - feature/*
   paths:
     exclude:
       - README.md
@@ -96,6 +98,13 @@ stages:
               platform: Any CPU
               configuration: Release
               maximumCpuCount: true
+
+          # Run unit tests
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet test
+            inputs:
+              command: test
+              arguments: '--no-build --configuration Release --collect:"XPlat Code Coverage"'
 
           # Pack NuGet 
           - task: DotNetCoreCLI@2
