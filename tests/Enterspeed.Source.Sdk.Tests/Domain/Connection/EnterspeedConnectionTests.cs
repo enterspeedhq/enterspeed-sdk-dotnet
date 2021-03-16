@@ -126,6 +126,27 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
             }
         }
 
+        [Fact]
+        public void ConnectionContainsVersion_Equal()
+        {
+            var fixture = new EnterspeedConnectionTestFixture();
+
+            var enterspeedConfiguration = new EnterspeedConfiguration()
+            {
+                ApiKey = "source-" + Guid.NewGuid(),
+                BaseUrl = "https://example.com/",
+                ConnectionTimeout = 1
+            };
+
+            fixture.ConfigurationProvider
+                .Configuration
+                .Returns(enterspeedConfiguration);
+
+            var sut = fixture.Create<EnterspeedConnection>();
+
+            Assert.Equal("https://example.com/ingest/v1", sut.HttpClientConnection.BaseAddress.AbsoluteUri);
+        }
+
         public class Flush
         {
             [Fact]
