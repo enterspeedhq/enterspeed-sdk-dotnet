@@ -7,18 +7,18 @@ using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Enterspeed.Source.Sdk.Domain.Services
 {
     public class EnterspeedIngestService : IEnterspeedIngestService
     {
         private readonly IEnterspeedConnection _connection;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public EnterspeedIngestService(IEnterspeedConnection connection)
+        public EnterspeedIngestService(IEnterspeedConnection connection, IJsonSerializer jsonSerializer)
         {
             _connection = connection;
+            _jsonSerializer = jsonSerializer;
         }
 
         public Response Save(IEnterspeedEntity entity)
@@ -38,10 +38,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
             try
             {
-                var content = JsonConvert.SerializeObject(entity, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+                var content = _jsonSerializer.Serialize(entity);
 
                 var buffer = Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
@@ -55,7 +52,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var ingestResponseJson = response?.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrWhiteSpace(ingestResponseJson))
                 {
-                    ingestResponse = JsonConvert.DeserializeObject<IngestResponse>(ingestResponseJson);
+                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(ingestResponseJson);
                 }
             }
             catch (Exception e)
