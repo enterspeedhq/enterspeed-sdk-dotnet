@@ -16,5 +16,10 @@
         /// Gets or sets timeout in seconds. Default: 60 seconds.
         /// </summary>
         public int ConnectionTimeout { get; set; } = 60;
+
+        /// <summary>
+        /// Gets the current version for the Ingest Endpoint.
+        /// </summary>
+        public string IngestVersion => "1";
     }
 }
