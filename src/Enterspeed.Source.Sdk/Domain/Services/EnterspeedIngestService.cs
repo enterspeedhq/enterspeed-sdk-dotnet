@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
+using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
 
@@ -14,11 +15,16 @@ namespace Enterspeed.Source.Sdk.Domain.Services
     {
         private readonly IEnterspeedConnection _connection;
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly string _ingestEndpoint;
 
-        public EnterspeedIngestService(IEnterspeedConnection connection, IJsonSerializer jsonSerializer)
+        public EnterspeedIngestService(
+            IEnterspeedConnection connection,
+            IJsonSerializer jsonSerializer,
+            IEnterspeedConfigurationProvider configurationProvider)
         {
             _connection = connection;
             _jsonSerializer = jsonSerializer;
+            _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
         }
 
         public Response Save(IEnterspeedEntity entity)
@@ -45,7 +51,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 response = _connection.HttpClientConnection.PostAsync(
-                        "ingest",
+                        _ingestEndpoint,
                         byteContent)
                     .Result;
 
@@ -100,7 +106,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             try
             {
                 response = _connection.HttpClientConnection.DeleteAsync(
-                        $"ingest?id={id}")
+                        $"{_ingestEndpoint}?id={id}")
                     .Result;
             }
             catch (Exception e)
@@ -139,7 +145,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 response = _connection.HttpClientConnection.PostAsync(
-                    "ingest",
+                    _ingestEndpoint,
                     byteContent).Result;
             }
             catch (Exception e)
