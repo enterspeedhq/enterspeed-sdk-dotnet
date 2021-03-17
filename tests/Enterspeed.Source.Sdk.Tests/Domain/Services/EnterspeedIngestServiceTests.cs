@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.Sdk.Api.Providers;
+using Enterspeed.Source.Sdk.Api.Services;
+using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Services;
+using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.Sdk.Tests.Mock;
 using NSubstitute;
 using Xunit;
@@ -24,6 +29,8 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 Customize(new AutoNSubstituteCustomization());
                 Connection = this.Freeze<IEnterspeedConnection>();
                 ConfigurationProvider = this.Freeze<IEnterspeedConfigurationProvider>();
+
+                this.Register<IJsonSerializer>(() => new SystemTextJsonSerializer());
             }
         }
 
@@ -34,16 +41,28 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": \"200\", \"message\": \"Entity Saved\"}", HttpStatusCode.OK);
+                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": 200, \"message\": \"Entity Saved\"}", HttpStatusCode.OK);
 
                 fixture.Connection
                     .HttpClientConnection
                     .Returns(new HttpClient(mockMessageHandler)
                     {
-                        BaseAddress = new Uri("https://example.com/api")
+                        BaseAddress = new Uri("https://example.com/")
                     });
 
-                var mockEntity = Substitute.For<IEnterspeedEntity>();
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
+                var mockEntity = new MockEnterspeedEntity()
+                {
+                    Id = "1234",
+                    Type = "test",
+                    Properties = new Dictionary<string, IEnterspeedProperty>
+                    {
+                        ["testProperty"] = new StringEnterspeedProperty("title", "Hello world")
+                    }
+                };
 
                 var sut = fixture.Create<EnterspeedIngestService>();
 
@@ -68,6 +87,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                         BaseAddress = new Uri("https://example.com")
                     });
 
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
                 var sut = fixture.Create<EnterspeedIngestService>();
 
                 var result = sut.Save(null);
@@ -88,6 +111,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                     {
                         BaseAddress = new Uri("https://example.com")
                     });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
 
                 var sut = fixture.Create<EnterspeedIngestService>();
 
@@ -113,6 +140,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                         BaseAddress = new Uri("https://example.com")
                     });
 
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
                 var sut = fixture.Create<EnterspeedIngestService>();
 
                 var result = sut.Delete("1234");
@@ -125,7 +156,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": \"200\", \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
+                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": 200, \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
 
                 fixture.Connection
                     .HttpClientConnection
@@ -133,6 +164,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                     {
                         BaseAddress = new Uri("https://example.com")
                     });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
 
                 var sut = fixture.Create<EnterspeedIngestService>();
 
@@ -154,6 +189,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                     {
                         BaseAddress = new Uri("https://example.com")
                     });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
 
                 var sut = fixture.Create<EnterspeedIngestService>();
 
@@ -179,6 +218,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                         BaseAddress = new Uri("https://example.com")
                     });
 
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
                 var sut = fixture.Create<EnterspeedIngestService>();
 
                 var result = sut.Test();
@@ -199,6 +242,10 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                     {
                         BaseAddress = new Uri("https://example.com")
                     });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
 
                 var sut = fixture.Create<EnterspeedIngestService>();
 

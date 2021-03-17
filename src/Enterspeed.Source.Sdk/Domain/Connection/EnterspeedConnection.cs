@@ -55,7 +55,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             }
 
             _httpClientConnection = new HttpClient();
-            _httpClientConnection.BaseAddress = new Uri(new Uri($"{BaseUrl}"), $"/ingest/v{IngestVersion}");
+            _httpClientConnection.BaseAddress = new Uri(BaseUrl);
             _httpClientConnection.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
 

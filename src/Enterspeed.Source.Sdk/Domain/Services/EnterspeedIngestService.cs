@@ -5,20 +5,26 @@ using System.Net.Http.Headers;
 using System.Text;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
+using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Enterspeed.Source.Sdk.Domain.Services
 {
     public class EnterspeedIngestService : IEnterspeedIngestService
     {
         private readonly IEnterspeedConnection _connection;
+        private readonly IJsonSerializer _jsonSerializer;
+        private readonly string _ingestEndpoint;
 
-        public EnterspeedIngestService(IEnterspeedConnection connection)
+        public EnterspeedIngestService(
+            IEnterspeedConnection connection,
+            IJsonSerializer jsonSerializer,
+            IEnterspeedConfigurationProvider configurationProvider)
         {
             _connection = connection;
+            _jsonSerializer = jsonSerializer;
+            _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
         }
 
         public Response Save(IEnterspeedEntity entity)
@@ -38,24 +44,21 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
             try
             {
-                var content = JsonConvert.SerializeObject(entity, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+                var content = _jsonSerializer.Serialize(entity);
 
                 var buffer = Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 response = _connection.HttpClientConnection.PostAsync(
-                        "ingest",
+                        _ingestEndpoint,
                         byteContent)
                     .Result;
 
                 var ingestResponseJson = response?.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrWhiteSpace(ingestResponseJson))
                 {
-                    ingestResponse = JsonConvert.DeserializeObject<IngestResponse>(ingestResponseJson);
+                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(ingestResponseJson);
                 }
             }
             catch (Exception e)
@@ -103,7 +106,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             try
             {
                 response = _connection.HttpClientConnection.DeleteAsync(
-                        $"ingest?id={id}")
+                        $"{_ingestEndpoint}?id={id}")
                     .Result;
             }
             catch (Exception e)
@@ -142,7 +145,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 response = _connection.HttpClientConnection.PostAsync(
-                    "ingest",
+                    _ingestEndpoint,
                     byteContent).Result;
             }
             catch (Exception e)

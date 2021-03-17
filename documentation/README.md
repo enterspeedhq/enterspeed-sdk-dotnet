@@ -24,3 +24,7 @@ Provider to serve the EnterspeedConfiguration.
 ## [Enterspeed Ingest Service](./services/enterspeed-ingest-service/README.md)
 
 Service for easily saving or deleting an entity.
+
+## [IJsonSerializer](./services/json-serializer/README.md)
+
+Abstraction for serializing and deserializing an object.
