@@ -19,6 +19,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
         private string ApiKey => _configurationProvider.Configuration.ApiKey;
         private string BaseUrl => _configurationProvider.Configuration.BaseUrl;
         private int ConnectionTimeout => _configurationProvider.Configuration.ConnectionTimeout;
+        private string IngestVersion => _configurationProvider.Configuration.IngestVersion;
 
         public HttpClient HttpClientConnection
         {
@@ -54,7 +55,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             }
 
             _httpClientConnection = new HttpClient();
-            _httpClientConnection.BaseAddress = new Uri(new Uri($"{BaseUrl}"), "/api/");
+            _httpClientConnection.BaseAddress = new Uri(BaseUrl);
             _httpClientConnection.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
 
