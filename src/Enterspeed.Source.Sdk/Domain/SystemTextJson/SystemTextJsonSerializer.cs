@@ -8,8 +8,7 @@ namespace Enterspeed.Source.Sdk.Domain.SystemTextJson
     {
         private readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         public SystemTextJsonSerializer()
