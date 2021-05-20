@@ -50,12 +50,16 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = _connection.HttpClientConnection.PostAsync(
-                        _ingestEndpoint,
-                        byteContent)
-                    .Result;
+                response = _connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
 
-                var ingestResponseJson = response?.Content.ReadAsStringAsync().Result;
+                var ingestResponseJson = response?.Content
+                    .ReadAsStringAsync()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
                 if (!string.IsNullOrWhiteSpace(ingestResponseJson))
                 {
                     ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(ingestResponseJson);
@@ -105,9 +109,11 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             HttpResponseMessage response = null;
             try
             {
-                response = _connection.HttpClientConnection.DeleteAsync(
-                        $"{_ingestEndpoint}?id={id}")
-                    .Result;
+                response = _connection.HttpClientConnection
+                    .DeleteAsync($"{_ingestEndpoint}?id={id}")
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
             }
             catch (Exception e)
             {
@@ -130,7 +136,11 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
             return new Response
             {
-                Message = response.Content.ReadAsStringAsync().Result,
+                Message = response.Content
+                    .ReadAsStringAsync()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult(),
                 Status = response.StatusCode,
                 Success = response.StatusCode == HttpStatusCode.OK
             };
@@ -144,9 +154,11 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var buffer = Encoding.UTF8.GetBytes("{}");
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                response = _connection.HttpClientConnection.PostAsync(
-                    _ingestEndpoint,
-                    byteContent).Result;
+                response = _connection.HttpClientConnection
+                    .PostAsync(_ingestEndpoint, byteContent)
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
             }
             catch (Exception e)
             {
