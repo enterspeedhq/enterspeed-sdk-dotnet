@@ -89,6 +89,8 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             return new Response
             {
                 Message = ingestResponse?.Message,
+                Errors = ingestResponse?.Errors,
+                ErrorCode = ingestResponse?.ErrorCode,
                 Status = statusCode,
                 Success = statusCode == HttpStatusCode.OK
             };
