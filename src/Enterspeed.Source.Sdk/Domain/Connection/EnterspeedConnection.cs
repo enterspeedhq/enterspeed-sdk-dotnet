@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Reflection;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 
@@ -58,6 +59,10 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             _httpClientConnection.BaseAddress = new Uri(BaseUrl);
             _httpClientConnection.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            #if NETSTANDARD1_2_OR_GREATER
+            _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $".NET-SDK/{Assembly.GetExecutingAssembly()?.GetName().Version?.ToString()}");
+            #endif
 
             _connectionEstablishedDate = DateTime.Now;
         }
