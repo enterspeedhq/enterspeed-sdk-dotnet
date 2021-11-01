@@ -60,7 +60,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             _httpClientConnection.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
 
-            #if NETSTANDARD2_0_OR_GREATER
+            #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
             _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $".NET-SDK/{Assembly.GetExecutingAssembly()?.GetName().Version?.ToString()}");
             #endif
 
