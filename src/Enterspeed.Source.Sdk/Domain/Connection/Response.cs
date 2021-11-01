@@ -13,5 +13,6 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
         public bool Success { get; set; }
         public Dictionary<string, string> Errors { get; set; }
         public string ErrorCode { get; set; }
+        public string ResponseContent { get; set; }
     }
 }

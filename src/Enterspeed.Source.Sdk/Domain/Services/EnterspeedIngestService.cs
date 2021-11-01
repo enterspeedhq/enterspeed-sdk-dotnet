@@ -41,7 +41,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
             HttpResponseMessage response = null;
             IngestResponse ingestResponse = null;
-
+            string responseContentAsString = null;
             try
             {
                 var content = _jsonSerializer.Serialize(entity);
@@ -55,14 +55,14 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                     .GetAwaiter()
                     .GetResult();
 
-                var ingestResponseJson = response?.Content
+                responseContentAsString = response?.Content
                     .ReadAsStringAsync()
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
-                if (!string.IsNullOrWhiteSpace(ingestResponseJson))
+                if (!string.IsNullOrWhiteSpace(responseContentAsString))
                 {
-                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(ingestResponseJson);
+                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(responseContentAsString);
                 }
             }
             catch (Exception e)
@@ -71,7 +71,8 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 {
                     Success = false,
                     Status = response?.StatusCode ?? HttpStatusCode.BadRequest,
-                    Exception = e
+                    Exception = e,
+                    ResponseContent = responseContentAsString
                 };
             }
 
@@ -92,7 +93,8 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 Errors = ingestResponse?.Errors,
                 ErrorCode = ingestResponse?.ErrorCode,
                 Status = statusCode,
-                Success = statusCode == HttpStatusCode.OK
+                Success = response.IsSuccessStatusCode,
+                ResponseContent = responseContentAsString
             };
         }
 
@@ -144,7 +146,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                     .GetAwaiter()
                     .GetResult(),
                 Status = response.StatusCode,
-                Success = response.StatusCode == HttpStatusCode.OK
+                Success = response.IsSuccessStatusCode
             };
         }
 
@@ -185,7 +187,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             return new Response
             {
                 Status = statusCode,
-                Success = statusCode == HttpStatusCode.OK
+                Success = response.IsSuccessStatusCode
             };
         }
     }

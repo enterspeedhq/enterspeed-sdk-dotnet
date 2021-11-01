@@ -42,8 +42,9 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
 
+                var responseContent = "{\"status\": 200, \"message\": \"Entity Saved\"}";
                 var mockMessageHandler = new MockHttpMessageHandler(
-                    "{\"status\": 200, \"message\": \"Entity Saved\"}", HttpStatusCode.OK);
+                    responseContent, HttpStatusCode.OK);
 
                 fixture.Connection
                     .HttpClientConnection
@@ -74,6 +75,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 Assert.True(result.Success);
                 Assert.Equal(200, result.StatusCode);
                 Assert.Equal("Entity Saved", result.Message);
+                Assert.Equal(responseContent, result.ResponseContent);
             }
 
             [Fact]
