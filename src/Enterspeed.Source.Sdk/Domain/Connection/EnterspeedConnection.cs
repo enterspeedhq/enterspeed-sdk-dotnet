@@ -61,7 +61,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
 
             #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
-            _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $".NET-SDK/{Assembly.GetExecutingAssembly()?.GetName().Version?.ToString()}");
+            _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly()?.GetName().Version?.ToString()}");
             #endif
 
             _connectionEstablishedDate = DateTime.Now;
