@@ -72,7 +72,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                     Success = false,
                     Status = response?.StatusCode ?? HttpStatusCode.BadRequest,
                     Exception = e,
-                    ResponseContent = responseContentAsString
+                    Content = responseContentAsString
                 };
             }
 
@@ -94,7 +94,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 ErrorCode = ingestResponse?.ErrorCode,
                 Status = statusCode,
                 Success = response.IsSuccessStatusCode,
-                ResponseContent = responseContentAsString
+                Content = responseContentAsString
             };
         }
 

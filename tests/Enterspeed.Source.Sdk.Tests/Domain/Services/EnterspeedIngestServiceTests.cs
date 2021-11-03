@@ -75,7 +75,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 Assert.True(result.Success);
                 Assert.Equal(200, result.StatusCode);
                 Assert.Equal("Entity Saved", result.Message);
-                Assert.Equal(responseContent, result.ResponseContent);
+                Assert.Equal(responseContent, result.Content);
             }
 
             [Fact]
