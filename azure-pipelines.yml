@@ -118,6 +118,7 @@ stages:
               packagesToPack: '**/*.csproj'
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
+              arguments: '--configuration Release /p:Version=$(semVersion)'
 
           # Publish artifacts
           - task: PublishPipelineArtifact@1

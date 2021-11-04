@@ -24,6 +24,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
         {
             public IEnterspeedConnection Connection { get; set; }
             public IEnterspeedConfigurationProvider ConfigurationProvider { get; set; }
+
             public EnterspeedIngestServiceTestFixture()
             {
                 Customize(new AutoNSubstituteCustomization());
@@ -41,14 +42,17 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": 200, \"message\": \"Entity Saved\"}", HttpStatusCode.OK);
+                var responseContent = "{\"status\": 200, \"message\": \"Entity Saved\"}";
+                var mockMessageHandler = new MockHttpMessageHandler(
+                    responseContent, HttpStatusCode.OK);
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com/")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com/")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -71,6 +75,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 Assert.True(result.Success);
                 Assert.Equal(200, result.StatusCode);
                 Assert.Equal("Entity Saved", result.Message);
+                Assert.Equal(responseContent, result.Content);
             }
 
             [Fact]
@@ -82,10 +87,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -107,10 +113,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -121,6 +128,70 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 var result = sut.Save(Substitute.For<IEnterspeedEntity>());
 
                 Assert.False(result.Success);
+            }
+
+            [Fact]
+            public void InvalidSourceApiKey_Error()
+            {
+                var fixture = new EnterspeedIngestServiceTestFixture();
+
+                var mockMessageHandler = new MockHttpMessageHandler(null, HttpStatusCode.Unauthorized);
+
+                fixture.Connection
+                    .HttpClientConnection
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com/")
+                        });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
+                var sut = fixture.Create<EnterspeedIngestService>();
+
+                var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+
+                Assert.False(result.Success);
+                Assert.Equal(401, result.StatusCode);
+            }
+
+            [Fact]
+            public void InvalidSourceEntityPropertyName_Error()
+            {
+                var fixture = new EnterspeedIngestServiceTestFixture();
+
+                var mockMessageHandler = new MockHttpMessageHandler(
+        @"{
+                    ""errors"": {
+                        ""properties.123"": ""Property name cannot start with a digit""
+                    },
+                    ""errorCode"": ""s-1001"",
+                    ""status"": 422,
+                    ""message"": ""Invalid request""
+                }", HttpStatusCode.Unauthorized);
+
+                fixture.Connection
+                    .HttpClientConnection
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com/")
+                        });
+
+                fixture.ConfigurationProvider
+                    .Configuration
+                    .Returns(new EnterspeedConfiguration());
+
+                var sut = fixture.Create<EnterspeedIngestService>();
+
+                var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+
+                Assert.False(result.Success);
+                Assert.Equal(422, result.StatusCode);
+                Assert.Equal("s-1001", result.ErrorCode);
+                Assert.Equal("Property name cannot start with a digit", result.Errors["properties.123"]);
             }
         }
 
@@ -135,10 +206,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -156,14 +228,16 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler("{\"status\": 200, \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
+                var mockMessageHandler = new MockHttpMessageHandler(
+                    "{\"status\": 200, \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -185,10 +259,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -213,10 +288,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
@@ -238,10 +314,11 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                 fixture.Connection
                     .HttpClientConnection
-                    .Returns(new HttpClient(mockMessageHandler)
-                    {
-                        BaseAddress = new Uri("https://example.com")
-                    });
+                    .Returns(
+                        new HttpClient(mockMessageHandler)
+                        {
+                            BaseAddress = new Uri("https://example.com")
+                        });
 
                 fixture.ConfigurationProvider
                     .Configuration
