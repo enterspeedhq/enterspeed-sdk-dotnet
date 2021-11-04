@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.5.0 - 2021-11-04]
+
+- Include Enterspeed System Header with version for this package
+- Include response content and errors dictionary from Ingest service
+
 ## [0.4.1 - 2021-05-20]
 
 - Fixed task awaiter in the EnterspeedIngestService
