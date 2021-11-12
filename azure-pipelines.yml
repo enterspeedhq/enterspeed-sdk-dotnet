@@ -82,6 +82,10 @@ stages:
           - visualstudio
         steps:
           # Restore packages
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '2.2.8'
           - task: DotNetCoreCLI@2
             displayName: Dotnet restore
             inputs:
