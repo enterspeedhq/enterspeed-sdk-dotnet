@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
+using System;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
@@ -52,3 +53,4 @@ namespace Enterspeed.Source.Sdk.Tests.Extensions
         }
     }
 }
+#endif
