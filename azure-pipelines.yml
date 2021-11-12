@@ -82,10 +82,6 @@ stages:
           - visualstudio
         steps:
           # Restore packages
-          - task: UseDotNet@2
-            inputs:
-              packageType: 'sdk'
-              version: '2.2.207'
           - task: DotNetCoreCLI@2
             displayName: Dotnet restore
             inputs:
@@ -100,14 +96,14 @@ stages:
             inputs:
               command: build
               projects: 'Enterspeed.Sdk.sln'
-              arguments: '--no-restore --configuration Release /p:Version=$(semVersion)'
+              arguments: '--no-restore --framework netcoreapp2.1 --configuration Release /p:Version=$(semVersion)'
 
           # Run unit tests
           - task: DotNetCoreCLI@2
             displayName: Dotnet test
             inputs:
               command: test
-              arguments: '--no-build --configuration Release --collect:"XPlat Code Coverage"'
+              arguments: '--no-build --framework netcoreapp2.1 --configuration Release --collect:"XPlat Code Coverage"'
 
           # Pack NuGet 
           - task: DotNetCoreCLI@2
