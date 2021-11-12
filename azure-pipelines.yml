@@ -81,27 +81,22 @@ stages:
           - msbuild
           - visualstudio
         steps:
-          # NuGet
-          - task: NuGetToolInstaller@1
-            displayName: NuGet install
+          # Restore packages
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet restore
             inputs:
-              versionSpec: 4.8.1
-          - task: NuGetCommand@2
-            displayName: NuGet restore
-            inputs:
-              restoreSolution: '**\*.sln'
+              command: restore
+              projects: 'Enterspeed.Sdk.sln'
               feedsToUse: config
-              nugetConfigPath: ./NuGet.Config
-              restoreDirectory: ../lib/packages
+              nugetConfigPath: '$(System.DefaultWorkingDirectory)/NuGet.Config'
 
           # Build solution
-          - task: VSBuild@1
-            displayName: Build solution
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet build
             inputs:
-              solution: ./Enterspeed.Sdk.sln
-              platform: Any CPU
-              configuration: Release
-              maximumCpuCount: true
+              command: build
+              projects: 'Enterspeed.Sdk.sln'
+              arguments: '--no-restore --configuration Release /p:Version=$(semVersion)'
 
           # Run unit tests
           - task: DotNetCoreCLI@2
