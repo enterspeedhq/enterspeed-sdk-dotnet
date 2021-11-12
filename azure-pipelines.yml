@@ -96,14 +96,14 @@ stages:
             inputs:
               command: build
               projects: 'Enterspeed.Sdk.sln'
-              arguments: '--no-restore --framework netcoreapp2.1 --configuration Release /p:Version=$(semVersion)'
+              arguments: '--no-restore --framework netstandard2.0 --configuration Release /p:Version=$(semVersion)'
 
           # Run unit tests
           - task: DotNetCoreCLI@2
             displayName: Dotnet test
             inputs:
               command: test
-              arguments: '--no-build --framework netcoreapp2.1 --configuration Release --collect:"XPlat Code Coverage"'
+              arguments: '--no-build --framework netstandard2.0 --configuration Release --collect:"XPlat Code Coverage"'
 
           # Pack NuGet 
           - task: DotNetCoreCLI@2
