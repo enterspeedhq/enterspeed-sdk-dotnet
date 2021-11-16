@@ -9,6 +9,10 @@ for the SDK to send data to the Enterspeed Ingest API.
 
 List of implementations that the SDK ships with.
 
+## [Dependency Injection](./dependency-injection/README.md)
+
+Extension methods for dependency injection.
+
 ## [Enterspeed Connection](./connection/README.md)
 
 The connection for Enterspeed.
