@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.6.0 - 2021-11-22]
+
+- Added extension methods for dependency injection
+
 ## [0.5.0 - 2021-11-04]
 
 - Include Enterspeed System Header with version for this package
