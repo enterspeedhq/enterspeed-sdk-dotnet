@@ -29,6 +29,11 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
         public Response Save(IEnterspeedEntity entity)
         {
+            return Save(entity, _connection);
+        }
+
+        public Response Save(IEnterspeedEntity entity, IEnterspeedConnection connection)
+        {
             if (entity == null)
             {
                 return new Response
@@ -50,7 +55,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = _connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
+                response = connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -100,6 +105,11 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
         public Response Delete(string id)
         {
+            return Delete(id, _connection);
+        }
+
+        public Response Delete(string id, IEnterspeedConnection connection)
+        {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return new Response
@@ -113,7 +123,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             HttpResponseMessage response = null;
             try
             {
-                response = _connection.HttpClientConnection
+                response = connection.HttpClientConnection
                     .DeleteAsync($"{_ingestEndpoint}?id={id}")
                     .ConfigureAwait(false)
                     .GetAwaiter()
