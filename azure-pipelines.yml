@@ -4,7 +4,6 @@ variables:
   minorVersion: 6
   patchVersion: 0
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
-  agentPool: Enterspeed-Production
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     releaseOnNuget: true
     # Versioning: 1.0.0
@@ -76,10 +75,10 @@ stages:
       - job: BuildPlatform
         displayName: Build Platform
         pool:
-          name: '$(agentPool)'
+          vmImage: windows-latest
           demands:
-          - msbuild
-          - visualstudio
+            - msbuild
+            - visualstudio
         steps:
           # NuGet
           - task: NuGetToolInstaller@1
@@ -135,7 +134,7 @@ stages:
         displayName: Release on NuGet.org
         environment: NuGetOrg
         pool:
-          vmImage: ubuntu-18.04
+          vmImage: ubuntu-latest
         strategy:
           runOnce:
             deploy:
