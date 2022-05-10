@@ -53,7 +53,7 @@ trigger:
       - README.md
       - CHANGELOG.md
       - documentation/*
-   
+
 pr:
   branches:
     include:
@@ -76,15 +76,18 @@ stages:
         displayName: Build Platform
         pool:
           vmImage: windows-latest
-          demands:
-            - msbuild
-            - visualstudio
+
         steps:
+          - task: UseDotNet@2
+            displayName: Install .NET 6.0 SDK
+            inputs:
+              packageType: sdk
+              version: '6.0.x'
+
           # NuGet
           - task: NuGetToolInstaller@1
             displayName: NuGet install
-            inputs:
-              versionSpec: 4.8.1
+
           - task: NuGetCommand@2
             displayName: NuGet restore
             inputs:
@@ -94,13 +97,12 @@ stages:
               restoreDirectory: ../lib/packages
 
           # Build solution
-          - task: VSBuild@1
-            displayName: Build solution
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet build
             inputs:
-              solution: ./Enterspeed.Sdk.sln
-              platform: Any CPU
-              configuration: Release
-              maximumCpuCount: true
+              command: build
+              projects: 'Enterspeed.Sdk.sln'
+              arguments: '--configuration Release'
 
           # Run unit tests
           - task: DotNetCoreCLI@2
@@ -152,7 +154,7 @@ stages:
                     script: |
                       git tag $(semVersion)
                       git push --tags
-                      
+
                 - task: NuGetCommand@2
                   displayName: Release on NuGet.org
                   inputs:
