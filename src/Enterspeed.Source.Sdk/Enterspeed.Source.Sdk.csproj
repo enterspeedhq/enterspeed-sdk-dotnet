@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard1.1;netstandard2.0</TargetFrameworks>
 
     <PackageId>Enterspeed.Source.Sdk</PackageId>
     <Authors>Enterspeed</Authors>

@@ -1,11 +1,10 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETSTANDARD2_0 || NET6_0
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-
 namespace Enterspeed.Source.Sdk.Domain.SystemTextJson
 {
     public class EnterspeedPropertyConverter : JsonConverter<IEnterspeedProperty>
