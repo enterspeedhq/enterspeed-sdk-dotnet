@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard1.1;netstandard2.0</TargetFrameworks>
 
     <PackageId>Enterspeed.Source.Sdk</PackageId>
     <Authors>Enterspeed</Authors>
@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[5.0,6.0)" />
-    <PackageReference Include="System.Text.Json" Version="[5.0,6.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[5.0,7.0)" />
+    <PackageReference Include="System.Text.Json" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">

@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 namespace Enterspeed.Source.Sdk.Api.Connection
 {
-    public interface IEnterspeedConnection
+    public interface IEnterspeedConnection : IDisposable
     {
         /// <summary>
         /// Gets the configured HttpClient.

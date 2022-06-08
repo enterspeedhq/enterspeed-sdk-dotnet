@@ -8,20 +8,20 @@ using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using NSubstitute;
 using Xunit;
-
 namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
 {
     public class EnterspeedConnectionTests
     {
         public class EnterspeedConnectionTestFixture : Fixture
         {
-            public IEnterspeedConfigurationProvider ConfigurationProvider { get; set; }
             public EnterspeedConnectionTestFixture()
             {
                 Customize(new AutoNSubstituteCustomization());
 
                 ConfigurationProvider = this.Freeze<IEnterspeedConfigurationProvider>();
             }
+
+            public IEnterspeedConfigurationProvider ConfigurationProvider { get; set; }
         }
 
         public class HttpClientConnection
@@ -33,7 +33,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
 
                 fixture.ConfigurationProvider
                     .Configuration
-                    .Returns(new EnterspeedConfiguration()
+                    .Returns(new EnterspeedConfiguration
                     {
                         ApiKey = "source-" + Guid.NewGuid(),
                         BaseUrl = "https://example.com/"
@@ -51,14 +51,14 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
 
                 fixture.ConfigurationProvider
                     .Configuration
-                    .Returns(new EnterspeedConfiguration()
+                    .Returns(new EnterspeedConfiguration
                     {
                         BaseUrl = "https://example.com/"
                     });
 
                 var sut = fixture.Create<EnterspeedConnection>();
 
-                Assert.Throws<Exception>(() => sut.HttpClientConnection);
+                Assert.Throws<ConfigurationException>(() => sut.HttpClientConnection);
             }
 
             [Fact]
@@ -68,14 +68,14 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
 
                 fixture.ConfigurationProvider
                     .Configuration
-                    .Returns(new EnterspeedConfiguration()
+                    .Returns(new EnterspeedConfiguration
                     {
                         ApiKey = "source-" + Guid.NewGuid()
                     });
 
                 var sut = fixture.Create<EnterspeedConnection>();
 
-                Assert.Throws<Exception>(() => sut.HttpClientConnection);
+                Assert.Throws<ConfigurationException>(() => sut.HttpClientConnection);
             }
 
             [Fact]
@@ -86,7 +86,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
                 var apiKey = "source-" + Guid.NewGuid();
                 fixture.ConfigurationProvider
                     .Configuration
-                    .Returns(new EnterspeedConfiguration()
+                    .Returns(new EnterspeedConfiguration
                     {
                         ApiKey = apiKey,
                         BaseUrl = "https://example.com/"
@@ -102,7 +102,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
             {
                 var fixture = new EnterspeedConnectionTestFixture();
 
-                var enterspeedConfiguration = new EnterspeedConfiguration()
+                var enterspeedConfiguration = new EnterspeedConfiguration
                 {
                     ApiKey = "source-" + Guid.NewGuid(),
                     BaseUrl = "https://example.com/",
@@ -135,7 +135,7 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
 
                 fixture.ConfigurationProvider
                     .Configuration
-                    .Returns(new EnterspeedConfiguration()
+                    .Returns(new EnterspeedConfiguration
                     {
                         ApiKey = "source-" + Guid.NewGuid(),
                         BaseUrl = "https://example.com/"
