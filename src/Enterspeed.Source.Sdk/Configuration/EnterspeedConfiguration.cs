@@ -20,6 +20,6 @@
         /// <summary>
         /// Gets the current version for the Ingest Endpoint.
         /// </summary>
-        public string IngestVersion => "1";
+        public string IngestVersion => "2";
     }
 }
