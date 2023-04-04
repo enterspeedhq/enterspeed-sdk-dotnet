@@ -3,6 +3,16 @@
 Abstraction to provide your own way of serializing and deserializing
 within the SDK.
 
+## .NET 6 or above support
+
+If you are using .NET 6 or above
+you will install the .NET 6 version of the SDK.
+
+This version provides an already implemented IJsonSerializer, that uses
+System.Text.Json: "SystemTextJsonSerializer".
+
+If you want to use something else, feel free to implement your own.
+
 ## .NET Standard 2.0 support
 
 If you are using .NET Core, .NET 5, .NET Framework 4.6.1 or above

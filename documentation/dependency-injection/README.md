@@ -7,12 +7,11 @@ An extension method to easily add the Enterspeed Ingest Service for dependency i
 Example:
 
 ```csharp
-using Enterspeed.Source.Sdk.Extensions.NETCore.Setup;
+using Enterspeed.Source.Sdk.Extensions.Setup;
 
 serviceCollection.AddEnterspeedIngestService(new EnterspeedConfiguration
 {
-    ApiKey = "source-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    BaseUrl = "https://api.enterspeed.com"
+    ApiKey = "source-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 });
 ```
 

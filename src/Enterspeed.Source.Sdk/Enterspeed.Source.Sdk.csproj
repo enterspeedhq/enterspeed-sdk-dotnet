@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard1.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.1;netstandard2.0;net6.0</TargetFrameworks>
 
     <PackageId>Enterspeed.Source.Sdk</PackageId>
     <Authors>Enterspeed</Authors>
@@ -9,21 +9,22 @@
     <IsPackable>true</IsPackable>
     <RepositoryUrl>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-
-    <CodeAnalysisRuleSet>..\..\lib\settings\Enterspeed.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</PackageProjectUrl>
+    <RepositoryType>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</RepositoryType>
+    <PackageTags>Enterspeed, SDK, Ingest</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[5.0,8.0)" />
+		<PackageReference Include="System.Text.Json" Version="[5.0,8.0)" />
+	</ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[5.0,7.0)" />
-    <PackageReference Include="System.Text.Json" Version="[5.0,7.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[5.0,8.0)" />
+    <PackageReference Include="System.Text.Json" Version="[5.0,8.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
@@ -31,8 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\..\lib\settings\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

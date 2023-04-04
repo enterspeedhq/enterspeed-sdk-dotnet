@@ -3,11 +3,15 @@
 The Enterspeed Connection simply establishes and maintains
 a connection to the configured Enterspeed endpoint.
 
-For the connection to work, 2 configuration settings in the
+For the connection to work, 1 configuration setting in the
 [EnterspeedConfiguration](./../configuration/README.md) _must_ be set:
 
 * ApiKey
 * BaseUrl
+
+## Base URL
+
+The `BaseUrl` has a default value of https://api.enterspeed.com, but can be overridden on the `EnterspeedConfiguration`.
 
 ## Connection timeout
 
