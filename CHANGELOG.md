@@ -7,6 +7,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [Unreleased]
 ### Added
 - Added support for `AddEnterspeedIngestService` extension method for .net 6 and greater
+- Simplyfied setup by providing default value for baseUrl (https://api.enterspeed.com)
 
 ### Breaking
 - `AddEnterspeedIngestService` moved from namespace `Enterspeed.Source.Sdk.Extensions.NETCore.Setup` to `Enterspeed.Source.Sdk.Extensions.Setup`
