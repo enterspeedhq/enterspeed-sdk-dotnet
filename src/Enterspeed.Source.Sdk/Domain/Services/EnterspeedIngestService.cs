@@ -124,7 +124,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             try
             {
                 response = connection.HttpClientConnection
-                    .DeleteAsync($"{_ingestEndpoint}?id={id}")
+                    .DeleteAsync($"{_ingestEndpoint}/{id}")
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
