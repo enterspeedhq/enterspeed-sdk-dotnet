@@ -5,9 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
 ## [Unreleased]
+### Added
+- Added support for `AddEnterspeedIngestService` extension method for .net 6 and greater
+- Simplyfied setup by providing default value for baseUrl (https://api.enterspeed.com)
 
 ### Changed
 - Updated SDK to use v2 of the Enterspeed ingest API
+
+### Breaking
+- `AddEnterspeedIngestService` moved from namespace `Enterspeed.Source.Sdk.Extensions.NETCore.Setup` to `Enterspeed.Source.Sdk.Extensions.Setup`
 
 ## [0.6.0 - 2021-11-22]
 

@@ -62,23 +62,6 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Connection
             }
 
             [Fact]
-            public void MissingBaseUrl_Throws()
-            {
-                var fixture = new EnterspeedConnectionTestFixture();
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration
-                    {
-                        ApiKey = "source-" + Guid.NewGuid()
-                    });
-
-                var sut = fixture.Create<EnterspeedConnection>();
-
-                Assert.Throws<ConfigurationException>(() => sut.HttpClientConnection);
-            }
-
-            [Fact]
             public void ApiKeyIsAddedToHeaders_Equal()
             {
                 var fixture = new EnterspeedConnectionTestFixture();
