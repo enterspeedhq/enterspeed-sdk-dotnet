@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+
+### Changed
+- Updated SDK to use v2 of the Enterspeed ingest API
+
 ## [0.6.0 - 2021-11-22]
 
 - Added extension methods for dependency injection
