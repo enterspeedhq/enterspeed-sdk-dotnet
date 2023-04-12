@@ -9,8 +9,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Added support for `AddEnterspeedIngestService` extension method for .net 6 and greater
 - Simplyfied setup by providing default value for baseUrl (https://api.enterspeed.com)
 
+### Added
+- Option to ingest a raw json string without having to map it to a entity type
+
 ### Changed
 - Updated SDK to use v2 of the Enterspeed ingest API
+- Updated dependencies to allow System.Text.Json v7
 
 ### Breaking
 - `AddEnterspeedIngestService` moved from namespace `Enterspeed.Source.Sdk.Extensions.NETCore.Setup` to `Enterspeed.Source.Sdk.Extensions.Setup`
