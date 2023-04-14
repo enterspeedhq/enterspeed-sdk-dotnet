@@ -21,5 +21,10 @@
         /// Gets the current version for the Ingest Endpoint.
         /// </summary>
         public string IngestVersion => "1";
+
+        /// <summary>
+        /// Gets or sets the base SystemInformation.
+        /// </summary>
+        public string SystemInformation { get; set; }
     }
 }
