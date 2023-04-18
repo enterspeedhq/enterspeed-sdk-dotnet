@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [1.0.0 - 2023-04-18]
 ### Added
 - Added support for `AddEnterspeedIngestService` extension method for .net 6 and greater
 - Simplyfied setup by providing default value for baseUrl (https://api.enterspeed.com)
