@@ -6,7 +6,7 @@ A list of Enterspeed endpoint versions that the SDKs uses.
 
 ### Enterspeed.Source.Sdk
 
-__Ingest__: v1
+The package uses __v2__ of the Enterspeed Ingest API version
 
 ## Installation
 
@@ -22,10 +22,70 @@ With Package Manager
 Install-Package Enterspeed.Source.Sdk -Version <version>
 ```
 
+## Getting started
+
+**1) Register services**
+
+Register required services by calling the `AddEnterspeedIngestService` extension method and provide your API key.
+
+````csharp
+using Enterspeed.Source.Sdk.Extensions.Setup;
+
+serviceCollection.AddEnterspeedIngestService(new EnterspeedConfiguration
+{
+    ApiKey = "source-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+});
+````
+
+**2) Create entity models**
+
+Create entity classes for your models by implementing the `IEnterspeedEntity` interface or inheriting from `EnterspeedEntity` class.
+
+````csharp
+using Enterspeed.Source.Sdk.Api.Models;
+
+public class ProductEntity : EnterspeedEntity
+{
+    public ProductEntity(string id)
+    {
+        Id = id;
+        Type = "product";
+    }
+}
+````
+
+**3) Ingest data**
+
+Use the `IEnterspeedIngestService` to ingest your entities into Enterspeed.
+
+````csharp
+using Enterspeed.Source.Sdk.Api.Models;
+using Enterspeed.Source.Sdk.Api.Services;
+
+public class IngestService
+{
+    private readonly IEnterspeedIngestService _enterspeedIngestService;
+
+    public IngestService(IEnterspeedIngestService enterspeedIngestService)
+    {
+        _enterspeedIngestService = enterspeedIngestService;
+    }
+
+    public void Ingest(IEnterspeedEntity enterspeedEntity)
+    {
+        _enterspeedIngestService.Save(enterspeedEntity);
+    }
+}
+````
+
 ## Documentation
 
 If you need more in depth details, please look through our documentation:  
-[Enterspeed Source SDK documentation](./documentation/README.md)
+[Enterspeed Source SDK documentation](https://github.com/enterspeedhq/enterspeed-sdk-dotnet/blob/develop/documentation/README.md)
+
+## Changelog
+
+See new features, fixes and breaking changes in the [Changelog](https://github.com/enterspeedhq/enterspeed-sdk-dotnet/blob/develop/CHANGELOG.md).
 
 ## Contributing
 
@@ -36,4 +96,4 @@ Otherwise you are welcome to open an Issue in our [issue tracker](https://github
 
 ## License
 
-Enterspeed .NET SDK is [MIT licensed](./LICENSE)
+Enterspeed .NET SDK is [MIT licensed](https://github.com/enterspeedhq/enterspeed-sdk-dotnet/blob/develop/LICENSE)
