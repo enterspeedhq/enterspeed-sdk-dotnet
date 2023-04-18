@@ -20,6 +20,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
         private string ApiKey => _configurationProvider.Configuration.ApiKey;
         private string BaseUrl => _configurationProvider.Configuration.BaseUrl;
         private int ConnectionTimeout => _configurationProvider.Configuration.ConnectionTimeout;
+        private string SystemInformation => _configurationProvider.Configuration.SystemInformation;
 
         public HttpClient HttpClientConnection
         {
@@ -67,6 +68,11 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
 #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
             _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly().GetName().Version}");
 #endif
+
+            if (!string.IsNullOrEmpty(SystemInformation))
+            {
+                _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System-Information", SystemInformation);
+            }
 
             _connectionEstablishedDate = DateTime.Now;
         }

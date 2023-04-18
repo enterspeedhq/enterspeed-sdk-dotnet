@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0_OR_GREATER
+﻿#if NETSTANDARD2_0 || NET6_0
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
@@ -9,7 +9,7 @@ using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enterspeed.Source.Sdk.Extensions.NETCore.Setup
+namespace Enterspeed.Source.Sdk.Extensions.Setup
 {
     public static class ServiceCollectionExtensions
     {

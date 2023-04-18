@@ -5,11 +5,11 @@ namespace Enterspeed.Source.Sdk.Api.Models
 {
     public class EnterspeedEntity : IEnterspeedEntity
     {
-        public string Id { get; }
-        public string Type { get; }
-        public string Url { get; }
-        public string[] Redirects { get; }
-        public string ParentId { get; }
-        public IDictionary<string, IEnterspeedProperty> Properties { get; }
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public string Url { get; set; }
+        public string[] Redirects { get; set; }
+        public string ParentId { get; set; }
+        public IDictionary<string, IEnterspeedProperty> Properties { get; set; }
     }
 }
