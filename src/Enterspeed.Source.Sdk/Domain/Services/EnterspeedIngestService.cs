@@ -169,7 +169,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 response = _connection.HttpClientConnection
-                    .PostAsync(_ingestEndpoint, byteContent)
+                    .PostAsync($"{_ingestEndpoint}/123", byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
