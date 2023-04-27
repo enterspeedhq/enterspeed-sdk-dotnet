@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+### Changed
+- Reverted back to SDK v1 of the Enterspeed ingest API
+
 ## [1.0.1 - 2023-04-19]
 ### Fixed
 - Fixed `Test` method used by connectors like (Umbraco, Sitecore, ...)

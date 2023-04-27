@@ -6,7 +6,7 @@ A list of Enterspeed endpoint versions that the SDKs uses.
 
 ### Enterspeed.Source.Sdk
 
-The package uses __v2__ of the Enterspeed Ingest API version
+The package uses __v1__ of the Enterspeed Ingest API version
 
 ## Installation
 
