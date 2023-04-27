@@ -55,7 +55,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = connection.HttpClientConnection.PostAsync($"{_ingestEndpoint}/{entity.Id}", byteContent)
+                response = connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -124,7 +124,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             try
             {
                 response = connection.HttpClientConnection
-                    .DeleteAsync($"{_ingestEndpoint}/{id}")
+                    .DeleteAsync($"{_ingestEndpoint}?id={id}")
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -169,7 +169,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 response = _connection.HttpClientConnection
-                    .PostAsync($"{_ingestEndpoint}/123", byteContent)
+                    .PostAsync(_ingestEndpoint, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
