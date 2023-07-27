@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,6 +17,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
         private readonly IEnterspeedConnection _connection;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly string _ingestEndpoint;
+        private readonly string _ingestEndpointV2;
 
         public EnterspeedIngestService(
             IEnterspeedConnection connection,
@@ -25,6 +27,51 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             _connection = connection;
             _jsonSerializer = jsonSerializer;
             _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
+            _ingestEndpointV2 = "/ingest/v2";
+        }
+        
+        public Response Save(IEnterspeedJsonEntity entity)
+        {
+            return Save(entity, _connection);
+        }
+
+        public Response Save(IEnterspeedJsonEntity entity, IEnterspeedConnection connection)
+        {
+            if (entity == null)
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentNullException(nameof(entity)),
+                    Message = "Missing entity"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.Id))
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Id)} is required"),
+                    Message = $"The required property '{nameof(entity.Id)}' on {nameof(entity)} is missing a value"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.Type))
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Type)} is required"),
+                    Message = $"The required property '{nameof(entity.Type)}' is missing a value"
+                };
+            }
+
+            var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entity.Properties);
+            var ingestEntity = new EnterspeedJsonIngestEntity(entity, properties);
+
+            var content = _jsonSerializer.Serialize(ingestEntity);
+            return Ingest(content, $"{_ingestEndpointV2}/{entity.Id}", connection);
         }
 
         public Response Save(IEnterspeedEntity entity)
@@ -44,18 +91,22 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
             }
 
+            var content = _jsonSerializer.Serialize(entity);
+            return Ingest(content, _ingestEndpoint, connection);
+        }
+
+        private Response Ingest(string jsonEntityToIngest, string ingestUrl, IEnterspeedConnection connection)
+        {
             HttpResponseMessage response = null;
             IngestResponse ingestResponse = null;
             string responseContentAsString = null;
             try
             {
-                var content = _jsonSerializer.Serialize(entity);
-
-                var buffer = Encoding.UTF8.GetBytes(content);
+                var buffer = Encoding.UTF8.GetBytes(jsonEntityToIngest);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
+                response = connection.HttpClientConnection.PostAsync(ingestUrl, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
