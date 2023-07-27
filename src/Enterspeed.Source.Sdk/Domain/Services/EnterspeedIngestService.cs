@@ -29,7 +29,48 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
             _ingestEndpointV2 = "/ingest/v2";
         }
-        
+
+        public Response Save(IEnterspeedObjectEntity entity)
+        {
+            return Save(entity, _connection);
+        }
+
+        public Response Save(IEnterspeedObjectEntity entity, IEnterspeedConnection connection)
+        {
+            if (entity == null)
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentNullException(nameof(entity)),
+                    Message = "Missing entity"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.Id))
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Id)} is required"),
+                    Message = $"The required property '{nameof(entity.Id)}' on {nameof(entity)} is missing a value"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.Type))
+            {
+                return new Response
+                {
+                    Success = false,
+                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Type)} is required"),
+                    Message = $"The required property '{nameof(entity.Type)}' is missing a value"
+                };
+            }
+
+            var content = _jsonSerializer.Serialize(entity);
+            return Ingest(content, $"{_ingestEndpointV2}/{entity.Id}", connection);
+        }
+
         public Response Save(IEnterspeedJsonEntity entity)
         {
             return Save(entity, _connection);

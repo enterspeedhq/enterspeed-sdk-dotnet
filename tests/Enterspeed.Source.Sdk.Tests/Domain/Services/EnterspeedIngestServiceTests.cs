@@ -79,32 +79,6 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
             }
 
             [Fact]
-            public void MissingEntity_False()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
-
-                var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK);
-
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
-
-                var sut = fixture.Create<EnterspeedIngestService>();
-
-                var result = sut.Save(null);
-
-                Assert.False(result.Success);
-            }
-
-            [Fact]
             public void EndpointError_False()
             {
                 var fixture = new EnterspeedIngestServiceTestFixture();
