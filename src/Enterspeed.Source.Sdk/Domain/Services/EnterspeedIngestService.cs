@@ -37,6 +37,23 @@ namespace Enterspeed.Source.Sdk.Domain.Services
 
         public Response Save(IEnterspeedSourceEntity entity, IEnterspeedConnection connection)
         {
+            var ingestEntity = new EnterspeedSourceEntity<object>(entity.Id, entity.Type, entity.Properties)
+            {
+                Url = entity.Url,
+                Redirects = entity.Redirects,
+                ParentId = entity.ParentId
+            };
+
+            return Save(ingestEntity, connection);
+        }
+
+        public Response Save<T>(IEnterspeedSourceEntity<T> entity)
+        {
+            return Save(entity, _connection);
+        }
+
+        public Response Save<T>(IEnterspeedSourceEntity<T> entity, IEnterspeedConnection connection)
+        {
             if (entity == null)
             {
                 return new Response
@@ -67,13 +84,13 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
             }
 
-            var ingestEntity = entity;
+            var ingestEntity = (EnterspeedSourceEntity<object>)entity;
             // If properties is of type string, we expect a json string that we do not want to serialize once again
             // so we create a new entity with the deserialized properties as a Dictionary<string, object>
             if (entity.Properties is string entityProperties)
             {
                 var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entityProperties);
-                ingestEntity = new EnterspeedSourceEntity(entity.Id, entity.Type, properties)
+                ingestEntity = new EnterspeedSourceEntity<object>(entity.Id, entity.Type, properties)
                 {
                     Url = entity.Url,
                     Redirects = entity.Redirects,
