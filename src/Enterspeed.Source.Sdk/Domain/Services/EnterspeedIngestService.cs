@@ -84,7 +84,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
             }
 
-            var ingestEntity = (EnterspeedSourceEntity<object>)entity;
+            object ingestEntity = entity;
             // If properties is of type string, we expect a json string that we do not want to serialize once again
             // so we create a new entity with the deserialized properties as a Dictionary<string, object>
             if (entity.Properties is string entityProperties)
@@ -100,7 +100,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             
             var serializedEntity = _jsonSerializer.Serialize(ingestEntity);
 
-            return Ingest(serializedEntity, $"{_ingestEndpointV2}/{ingestEntity.Id}", connection);
+            return Ingest(serializedEntity, $"{_ingestEndpointV2}/{entity.Id}", connection);
         }
 
         public Response Save(IEnterspeedEntity entity)
