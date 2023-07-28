@@ -30,12 +30,12 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             _ingestEndpointV2 = "/ingest/v2";
         }
 
-        public Response Save(IEnterspeedObjectEntity entity)
+        public Response Save(IEnterspeedSourceEntity entity)
         {
             return Save(entity, _connection);
         }
 
-        public Response Save(IEnterspeedObjectEntity entity, IEnterspeedConnection connection)
+        public Response Save(IEnterspeedSourceEntity entity, IEnterspeedConnection connection)
         {
             if (entity == null)
             {
@@ -67,52 +67,23 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
             }
 
-            var content = _jsonSerializer.Serialize(entity);
-            return Ingest(content, $"{_ingestEndpointV2}/{entity.Id}", connection);
-        }
-
-        public Response Save(IEnterspeedJsonEntity entity)
-        {
-            return Save(entity, _connection);
-        }
-
-        public Response Save(IEnterspeedJsonEntity entity, IEnterspeedConnection connection)
-        {
-            if (entity == null)
+            var ingestEntity = entity;
+            // If properties is of type string, we expect a json string that we do not want to serialize once again
+            // so we create a new entity with the deserialized properties as a Dictionary<string, object>
+            if (entity.Properties is string entityProperties)
             {
-                return new Response
+                var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entityProperties);
+                ingestEntity = new EnterspeedSourceEntity(entity.Id, entity.Type, properties)
                 {
-                    Success = false,
-                    Exception = new ArgumentNullException(nameof(entity)),
-                    Message = "Missing entity"
+                    Url = entity.Url,
+                    Redirects = entity.Redirects,
+                    ParentId = entity.ParentId
                 };
             }
+            
+            var serializedEntity = _jsonSerializer.Serialize(ingestEntity);
 
-            if (string.IsNullOrWhiteSpace(entity.Id))
-            {
-                return new Response
-                {
-                    Success = false,
-                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Id)} is required"),
-                    Message = $"The required property '{nameof(entity.Id)}' on {nameof(entity)} is missing a value"
-                };
-            }
-
-            if (string.IsNullOrWhiteSpace(entity.Type))
-            {
-                return new Response
-                {
-                    Success = false,
-                    Exception = new ArgumentException($"{nameof(entity)}.{nameof(entity.Type)} is required"),
-                    Message = $"The required property '{nameof(entity.Type)}' is missing a value"
-                };
-            }
-
-            var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entity.Properties);
-            var ingestEntity = new EnterspeedJsonIngestEntity(entity, properties);
-
-            var content = _jsonSerializer.Serialize(ingestEntity);
-            return Ingest(content, $"{_ingestEndpointV2}/{entity.Id}", connection);
+            return Ingest(serializedEntity, $"{_ingestEndpointV2}/{ingestEntity.Id}", connection);
         }
 
         public Response Save(IEnterspeedEntity entity)

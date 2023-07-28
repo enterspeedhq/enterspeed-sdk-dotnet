@@ -6,10 +6,8 @@ namespace Enterspeed.Source.Sdk.Api.Services
 {
     public interface IEnterspeedIngestService
     {
-        Response Save(IEnterspeedObjectEntity entity);
-        Response Save(IEnterspeedObjectEntity entity, IEnterspeedConnection connection);
-        Response Save(IEnterspeedJsonEntity entity);
-        Response Save(IEnterspeedJsonEntity entity, IEnterspeedConnection connection);
+        Response Save(IEnterspeedSourceEntity entity);
+        Response Save(IEnterspeedSourceEntity entity, IEnterspeedConnection connection);
         Response Save(IEnterspeedEntity entity);
         Response Save(IEnterspeedEntity entity, IEnterspeedConnection connection);
         Response Delete(string id);
