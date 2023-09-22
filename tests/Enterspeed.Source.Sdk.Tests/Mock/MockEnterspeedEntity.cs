@@ -11,6 +11,6 @@ namespace Enterspeed.Source.Sdk.Tests.Mock
         public string Url { get; set; }
         public string[] Redirects { get; set; }
         public string ParentId { get; set; }
-        public IDictionary<string, IEnterspeedProperty> Properties { get; set; }
+        public object Properties { get; set; }
     }
 }
