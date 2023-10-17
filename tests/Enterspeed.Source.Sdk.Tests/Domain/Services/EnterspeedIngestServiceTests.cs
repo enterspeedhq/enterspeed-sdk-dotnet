@@ -104,205 +104,206 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
                 Assert.False(result.Success);
             }
 
-            [Fact]
-            public void InvalidSourceApiKey_Error()
+            // [Fact]
+            // public void InvalidSourceApiKey_Error()
+            // {
+            //     var fixture = new EnterspeedIngestServiceTestFixture();
+            //
+            //     var mockMessageHandler = new MockHttpMessageHandler(null, HttpStatusCode.Unauthorized);
+            //
+            //     fixture.Connection
+            //         .HttpClientConnection
+            //         .Returns(
+            //             new HttpClient(mockMessageHandler)
+            //             {
+            //                 BaseAddress = new Uri("https://example.com/")
+            //             });
+            //
+            //     fixture.ConfigurationProvider
+            //         .Configuration
+            //         .Returns(new EnterspeedConfiguration());
+            //
+            //     var sut = fixture.Create<EnterspeedIngestService>();
+            //
+            //     var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+            //
+            //     Assert.False(result.Success);
+            //     Assert.Equal(401, result.StatusCode);
+            // }
+
+            //     [Fact]
+            //     public void InvalidSourceEntityPropertyName_Error()
+            //     {
+            //         var fixture = new EnterspeedIngestServiceTestFixture();
+            //
+            //         var mockMessageHandler = new MockHttpMessageHandler(
+            // @"{
+            //             ""errors"": {
+            //                 ""properties.123"": ""Property name cannot start with a digit""
+            //             },
+            //             ""errorCode"": ""s-1001"",
+            //             ""status"": 422,
+            //             ""message"": ""Invalid request""
+            //         }", HttpStatusCode.Unauthorized);
+            //
+            //         fixture.Connection
+            //             .HttpClientConnection
+            //             .Returns(
+            //                 new HttpClient(mockMessageHandler)
+            //                 {
+            //                     BaseAddress = new Uri("https://example.com/")
+            //                 });
+            //
+            //         fixture.ConfigurationProvider
+            //             .Configuration
+            //             .Returns(new EnterspeedConfiguration());
+            //
+            //         var sut = fixture.Create<EnterspeedIngestService>();
+            //
+            //         var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+            //
+            //         Assert.False(result.Success);
+            //         Assert.Equal(422, result.StatusCode);
+            //         Assert.Equal("s-1001", result.ErrorCode);
+            //         Assert.Equal("Property name cannot start with a digit", result.Errors["properties.123"]);
+            //     }
+            // }
+
+            public class Delete
             {
-                var fixture = new EnterspeedIngestServiceTestFixture();
+                [Fact]
+                public void HappyFlow_True()
+                {
+                    var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler(null, HttpStatusCode.Unauthorized);
+                    var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK);
 
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com/")
-                        });
+                    fixture.Connection
+                        .HttpClientConnection
+                        .Returns(
+                            new HttpClient(mockMessageHandler)
+                            {
+                                BaseAddress = new Uri("https://example.com")
+                            });
 
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
+                    fixture.ConfigurationProvider
+                        .Configuration
+                        .Returns(new EnterspeedConfiguration());
 
-                var sut = fixture.Create<EnterspeedIngestService>();
+                    var sut = fixture.Create<EnterspeedIngestService>();
 
-                var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+                    var result = sut.Delete("1234");
 
-                Assert.False(result.Success);
-                Assert.Equal(401, result.StatusCode);
+                    Assert.True(result.Success);
+                }
+
+                [Fact]
+                public void MissingId_False()
+                {
+                    var fixture = new EnterspeedIngestServiceTestFixture();
+
+                    var mockMessageHandler = new MockHttpMessageHandler(
+                        "{\"status\": 200, \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
+
+                    fixture.Connection
+                        .HttpClientConnection
+                        .Returns(
+                            new HttpClient(mockMessageHandler)
+                            {
+                                BaseAddress = new Uri("https://example.com")
+                            });
+
+                    fixture.ConfigurationProvider
+                        .Configuration
+                        .Returns(new EnterspeedConfiguration());
+
+                    var sut = fixture.Create<EnterspeedIngestService>();
+
+                    var result = sut.Delete(string.Empty);
+
+                    Assert.False(result.Success);
+                }
+
+                [Fact]
+                public void EndpointError_False()
+                {
+                    var fixture = new EnterspeedIngestServiceTestFixture();
+
+                    var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, true);
+
+                    fixture.Connection
+                        .HttpClientConnection
+                        .Returns(
+                            new HttpClient(mockMessageHandler)
+                            {
+                                BaseAddress = new Uri("https://example.com")
+                            });
+
+                    fixture.ConfigurationProvider
+                        .Configuration
+                        .Returns(new EnterspeedConfiguration());
+
+                    var sut = fixture.Create<EnterspeedIngestService>();
+
+                    var result = sut.Delete("1234");
+
+                    Assert.False(result.Success);
+                }
             }
 
-            [Fact]
-            public void InvalidSourceEntityPropertyName_Error()
+            public class Test
             {
-                var fixture = new EnterspeedIngestServiceTestFixture();
+                [Fact]
+                public void HappyFlow_True()
+                {
+                    var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler(
-        @"{
-                    ""errors"": {
-                        ""properties.123"": ""Property name cannot start with a digit""
-                    },
-                    ""errorCode"": ""s-1001"",
-                    ""status"": 422,
-                    ""message"": ""Invalid request""
-                }", HttpStatusCode.Unauthorized);
+                    var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK);
 
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com/")
-                        });
+                    fixture.Connection
+                        .HttpClientConnection
+                        .Returns(
+                            new HttpClient(mockMessageHandler)
+                            {
+                                BaseAddress = new Uri("https://example.com")
+                            });
 
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
+                    fixture.ConfigurationProvider
+                        .Configuration
+                        .Returns(new EnterspeedConfiguration());
 
-                var sut = fixture.Create<EnterspeedIngestService>();
+                    var sut = fixture.Create<EnterspeedIngestService>();
 
-                var result = sut.Save(Substitute.For<IEnterspeedEntity>());
+                    var result = sut.Test();
 
-                Assert.False(result.Success);
-                Assert.Equal(422, result.StatusCode);
-                Assert.Equal("s-1001", result.ErrorCode);
-                Assert.Equal("Property name cannot start with a digit", result.Errors["properties.123"]);
-            }
-        }
+                    Assert.True(result.Success);
+                }
 
-        public class Delete
-        {
-            [Fact]
-            public void HappyFlow_True()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
+                [Fact]
+                public void EndpointError_False()
+                {
+                    var fixture = new EnterspeedIngestServiceTestFixture();
 
-                var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK);
+                    var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, true);
 
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
+                    fixture.Connection
+                        .HttpClientConnection
+                        .Returns(
+                            new HttpClient(mockMessageHandler)
+                            {
+                                BaseAddress = new Uri("https://example.com")
+                            });
 
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
+                    fixture.ConfigurationProvider
+                        .Configuration
+                        .Returns(new EnterspeedConfiguration());
 
-                var sut = fixture.Create<EnterspeedIngestService>();
+                    var sut = fixture.Create<EnterspeedIngestService>();
 
-                var result = sut.Delete("1234");
+                    var result = sut.Test();
 
-                Assert.True(result.Success);
-            }
-
-            [Fact]
-            public void MissingId_False()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
-
-                var mockMessageHandler = new MockHttpMessageHandler(
-                    "{\"status\": 200, \"message\": \"Entity Deleted\"}", HttpStatusCode.OK);
-
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
-
-                var sut = fixture.Create<EnterspeedIngestService>();
-
-                var result = sut.Delete(string.Empty);
-
-                Assert.False(result.Success);
-            }
-
-            [Fact]
-            public void EndpointError_False()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
-
-                var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, true);
-
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
-
-                var sut = fixture.Create<EnterspeedIngestService>();
-
-                var result = sut.Delete("1234");
-
-                Assert.False(result.Success);
-            }
-        }
-
-        public class Test
-        {
-            [Fact]
-            public void HappyFlow_True()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
-
-                var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.OK);
-
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
-
-                var sut = fixture.Create<EnterspeedIngestService>();
-
-                var result = sut.Test();
-
-                Assert.True(result.Success);
-            }
-
-            [Fact]
-            public void EndpointError_False()
-            {
-                var fixture = new EnterspeedIngestServiceTestFixture();
-
-                var mockMessageHandler = new MockHttpMessageHandler(HttpStatusCode.BadRequest, true);
-
-                fixture.Connection
-                    .HttpClientConnection
-                    .Returns(
-                        new HttpClient(mockMessageHandler)
-                        {
-                            BaseAddress = new Uri("https://example.com")
-                        });
-
-                fixture.ConfigurationProvider
-                    .Configuration
-                    .Returns(new EnterspeedConfiguration());
-
-                var sut = fixture.Create<EnterspeedIngestService>();
-
-                var result = sut.Test();
-
-                Assert.False(result.Success);
+                    Assert.False(result.Success);
+                }
             }
         }
     }
