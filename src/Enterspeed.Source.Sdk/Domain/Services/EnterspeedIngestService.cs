@@ -85,6 +85,12 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
             }
 
+            // This was the default approach. We expect that everything is taken care of here.
+            if (entity.Properties is IDictionary<string, IEnterspeedProperty>)
+            {
+                return Ingest(entity, _connection);
+            }
+
             object ingestEntity = entity;
             // If properties is of type string, we expect a json string that we do not want to serialize once again
             // so we create a new entity with the deserialized properties as a Dictionary<string, object>
@@ -99,15 +105,10 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 };
 
                 var serializedEntity = _jsonSerializer.Serialize(ingestEntity);
-
                 return Ingest(serializedEntity, $"{_ingestEndpointV2}/{entity.Id}", connection);
             }
-            else if (entity.Properties is IDictionary<string, IEnterspeedProperty> _)
-            {
-                return Ingest(entity, $"{_ingestEndpointV2}/{entity.Id}", connection);
-            }
 
-            return null;
+            return Ingest(_jsonSerializer.Serialize(ingestEntity), $"{_ingestEndpointV2}/{entity.Id}", connection);
         }
 
         private Response Ingest(string jsonEntityToIngest, string ingestUrl, IEnterspeedConnection connection)
@@ -169,7 +170,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             };
         }
 
-        public Response Ingest<T>(IEnterspeedEntity<T> entity, string ingestUrl, IEnterspeedConnection connection)
+        public Response Ingest<T>(IEnterspeedEntity<T> entity, IEnterspeedConnection connection)
         {
             if (entity == null)
             {
