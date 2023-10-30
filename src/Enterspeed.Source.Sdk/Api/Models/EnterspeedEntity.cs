@@ -31,7 +31,6 @@
             Id = id;
             Type = type;
             Properties = properties;
-
         }
     }
 }

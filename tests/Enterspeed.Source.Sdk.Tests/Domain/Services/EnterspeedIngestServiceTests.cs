@@ -192,7 +192,9 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                     var sut = fixture.Create<EnterspeedIngestService>();
 
-                    var result = sut.Delete("1234");
+                var entity = Substitute.For<EnterspeedEntity>("id", "test-type", new object());
+
+                var result = sut.Save(entity);
 
                     Assert.True(result.Success);
                 }
@@ -274,7 +276,9 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.Services
 
                     var sut = fixture.Create<EnterspeedIngestService>();
 
-                    var result = sut.Test();
+                var entity = Substitute.For<EnterspeedEntity>("id", "test-type", new object());
+
+                var result = sut.Save(entity);
 
                     Assert.True(result.Success);
                 }
