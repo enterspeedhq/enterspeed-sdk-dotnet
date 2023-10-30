@@ -7,19 +7,19 @@ using System.Text.Json.Serialization;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 namespace Enterspeed.Source.Sdk.Domain.SystemTextJson
 {
-    public class EnterspeedPropertyConverter : JsonConverter<object>
+    public class EnterspeedPropertyConverter : JsonConverter<IEnterspeedProperty>
     {
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IEnterspeedProperty Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             throw new NotImplementedException("Cannot deserialize an IEnterspeedProperty");
         }
 
-        public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IEnterspeedProperty value, JsonSerializerOptions options)
         {
             WriteProperties(writer, value, options);
         }
 
-        private static void WriteProperties(Utf8JsonWriter writer, object value, JsonSerializerOptions options, bool createObject = true)
+        private static void WriteProperties(Utf8JsonWriter writer, IEnterspeedProperty value, JsonSerializerOptions options, bool createObject = true)
         {
             if (createObject)
             {
@@ -59,7 +59,7 @@ namespace Enterspeed.Source.Sdk.Domain.SystemTextJson
                         writer.WriteEndArray();
                         break;
 
-                    case Dictionary<string, IEnterspeedProperty> objectProperties:
+                    case IDictionary<string, IEnterspeedProperty> objectProperties:
                         writer.WriteStartObject(jsonEncodedPropertyName);
 
                         foreach (var objectProperty in objectProperties)

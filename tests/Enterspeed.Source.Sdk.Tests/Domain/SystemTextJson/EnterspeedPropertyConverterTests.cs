@@ -55,8 +55,6 @@ namespace Enterspeed.Source.Sdk.Tests.Domain.SystemTextJson
 
             var value = new MockEnterspeedEntity
             {
-                Id = "id",
-                Type = "type",
                 Properties = new Dictionary<string, IEnterspeedProperty>()
                 {
                     ["isValid"] = new BooleanEnterspeedProperty("isValid", true)
