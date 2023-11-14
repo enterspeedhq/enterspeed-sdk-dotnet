@@ -1,13 +1,5 @@
 # [Enterspeed .NET SDK](https://www.enterspeed.com/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) [![NuGet version](https://img.shields.io/nuget/v/Enterspeed.Source.Sdk)](https://www.nuget.org/packages/Enterspeed.Source.Sdk/) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/enterspeedhq/enterspeed-sdk-dotnet/pulls) [![Twitter](https://img.shields.io/twitter/follow/enterspeedhq?style=social)](https://twitter.com/enterspeedhq)
 
-## Version 
-
-A list of Enterspeed endpoint versions that the SDKs uses.
-
-### Enterspeed.Source.Sdk
-
-The package uses __v1__ of the Enterspeed Ingest API version
-
 ## Installation
 
 With .NET CLI
@@ -39,7 +31,8 @@ serviceCollection.AddEnterspeedIngestService(new EnterspeedConfiguration
 
 **2) Create entity models**
 
-Create entity classes for your models by implementing the `IEnterspeedEntity` interface or inheriting from `EnterspeedEntity` class.
+Create entity classes for your models by implementing the `IEnterspeedEntity` interface or inheriting from `EnterspeedEntity` class
+or simply just use the `EnterspeedEntity` class directly.
 
 ````csharp
 using Enterspeed.Source.Sdk.Api.Models;
