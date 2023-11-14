@@ -8,7 +8,7 @@ namespace Enterspeed.Source.Sdk.Tests.Api.Models
         [Fact]
         public void EnterspeedEntity_ImplementsInterface()
         {
-            var entity = new EnterspeedEntity();
+            var entity = new EnterspeedEntity("id", "type");
 
             Assert.IsAssignableFrom<IEnterspeedEntity>(entity);
         }

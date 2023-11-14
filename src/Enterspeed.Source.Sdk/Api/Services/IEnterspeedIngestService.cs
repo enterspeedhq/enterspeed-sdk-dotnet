@@ -8,6 +8,8 @@ namespace Enterspeed.Source.Sdk.Api.Services
     {
         Response Save(IEnterspeedEntity entity);
         Response Save(IEnterspeedEntity entity, IEnterspeedConnection connection);
+        Response Save<T>(IEnterspeedEntity<T> entity);
+        Response Save<T>(IEnterspeedEntity<T> entity, IEnterspeedConnection connection);    
         Response Delete(string id);
         Response Delete(string id, IEnterspeedConnection connection);
     }
