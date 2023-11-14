@@ -4,6 +4,92 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+### Breaking
+- The type for `Properties` on `IEnterspeedEntity` has changed from `IDictionary<string, IEnterspeedProperty>` to `object`
+
+### Added
+- A generic version of `IEnterspeedEntity` has been added
+
+#### Release Notes
+
+With this update you now have way more flexibility when building your `EnterspeedEntity`, that you need for ingest.
+
+In V1 you had to build the properties on your `EnterspeedEntity` using `IEnterspeedProperty` 
+and declare the type of each property using the different `IEnterspeedProperty` types 
+(`StringEnterspeedProperty`,  `NumberEnterspeedProperty`, `BooleanEnterspeedProperty`, `ObjectEnterspeedProperty` and `ArrayEnterspeedProperty`).
+
+**Example from Enterspeed.Source.Sdk V1**
+```c#
+var entity = new EnterspeedEntity
+       {
+           Id = "66c5174a-c173-4503-86f9-ee5bf3defe9b",
+           Type = "test",
+           Properties = new Dictionary<string, IEnterspeedProperty>
+           {
+               { "key", new StringEnterspeedProperty("test-product-name") },
+               { "productType", new StringEnterspeedProperty("Accessories") },
+               { "name", new ObjectEnterspeedProperty(
+                     new Dictionary<string, IEnterspeedProperty>
+                    {
+                         { "en_US", new StringEnterspeedProperty("Test product name ") },
+                         { "de_DE", new StringEnterspeedProperty("Produktbezeichnung testen") }
+                    }
+                ) },
+            { "description", new ObjectEnterspeedProperty(
+                new Dictionary<string, IEnterspeedProperty>
+                 {
+                     { "en_US", new StringEnterspeedProperty("Test product description") },
+                     { "de_DE", new StringEnterspeedProperty("Produktbeschreibung testen1") }
+                 }
+            ) }
+        }
+    }
+
+var response = enterspeedIngestService.Save(entity);
+```
+
+With V2 you can still do it like in V1 by using the generic version of the `EnterspeedEntity` (`EnterspeedEntity<IDictionary<string, IEnterspeedProperty>>`).
+
+But you can do way more with V2, below are some examples of what you can do with V2.
+
+**Ingesting raw json, e.g. data you have from a file or an API endpoint**
+```c#
+var entity = new EnterspeedEntity
+{
+    Id = "my-id",
+    Type = "test",
+    Properties = "{\"prop1\": \"value1\", \"prop2\": 2, \"prop3\": { \"prop4\": false } }"
+};
+```
+
+**Setting properties to a custom object**
+```c#
+var entity = new EnterspeedEntity
+{
+    Id = "my-id",
+    Type = "test",
+    Properties = myOwnObjectType
+};
+```
+
+**Using a generic version of `EnterspeedEntity`**
+```c#
+var entity = new EnterspeedEntity<Dictionary<string, object>>
+{
+    Id = "my-id",
+    Type = "test",
+    Properties = new Dictionary<string, object>
+    {
+        { "prop1", "value1" },
+        { "prop2", 2 },
+        { "prop3", new Dictionary<string, object> { {"prop4", false} } }
+    }
+};
+
+entity.Properties.Add("prop5", "value5");
+```
+
 ## [1.0.2 - 2023-04-27]
 ### Changed
 - Reverted back to SDK v1 of the Enterspeed ingest API
