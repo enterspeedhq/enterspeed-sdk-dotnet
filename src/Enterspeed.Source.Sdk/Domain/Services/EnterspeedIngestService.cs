@@ -88,7 +88,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             // This was the default approach. We expect that everything is taken care of here.
             if (entity.Properties is IDictionary<string, IEnterspeedProperty>)
             {
-                return Ingest(entity, _connection);
+                return Ingest(entity, connection);
             }
 
             object ingestEntity = entity;
