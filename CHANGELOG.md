@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [2.0.0 - 2023-11-14]
 ### Breaking
 - The type for `Properties` on `IEnterspeedEntity` has changed from `IDictionary<string, IEnterspeedProperty>` to `object`
 
