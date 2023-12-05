@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0 || NET6_0 || NET8_0
+﻿#if NETSTANDARD2_0 || NET6_0
 using System;
 using System.Net;
 using System.Text.Json;
