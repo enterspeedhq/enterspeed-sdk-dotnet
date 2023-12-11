@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [2.0.1 - 2023-12-11]
 ### Changed
 - Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 8
 - Updated dependency on `System.Text.Json` to version 8
