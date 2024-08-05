@@ -17,6 +17,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
     {
         private readonly IEnterspeedConnection _connection;
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly IEnterspeedConfigurationProvider _configurationProvider;
         private readonly string _ingestEndpoint;
         private readonly string _ingestEndpointV2;
 
@@ -27,6 +28,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
         {
             _connection = connection;
             _jsonSerializer = jsonSerializer;
+            _configurationProvider = configurationProvider;
             _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
             _ingestEndpointV2 = "/ingest/v2";
         }
@@ -91,86 +93,30 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 return Ingest(entity, connection);
             }
 
-            object ingestEntity = entity;
             // If properties is of type string, we expect a json string that we do not want to serialize once again
             // so we create a new entity with the deserialized properties as a Dictionary<string, object>
             if (entity.Properties is string entityProperties)
             {
                 var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entityProperties);
-                ingestEntity = new EnterspeedEntity<object>(entity.Id, entity.Type, properties)
+                var ingestEntity = new EnterspeedEntity<object>(entity.Id, entity.Type, properties)
                 {
                     Url = entity.Url,
                     Redirects = entity.Redirects,
                     ParentId = entity.ParentId
                 };
 
-                var serializedEntity = _jsonSerializer.Serialize(ingestEntity);
-                return Ingest(serializedEntity, $"{_ingestEndpointV2}/{entity.Id}", connection);
+                return Ingest(ingestEntity, "2", connection);
             }
 
-            return Ingest(_jsonSerializer.Serialize(ingestEntity), $"{_ingestEndpointV2}/{entity.Id}", connection);
-        }
-
-        private Response Ingest(string jsonEntityToIngest, string ingestUrl, IEnterspeedConnection connection)
-        {
-            HttpResponseMessage response = null;
-            IngestResponse ingestResponse = null;
-            string responseContentAsString = null;
-            try
-            {
-                var buffer = Encoding.UTF8.GetBytes(jsonEntityToIngest);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                response = connection.HttpClientConnection.PostAsync(ingestUrl, byteContent)
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
-
-                responseContentAsString = response?.Content
-                    .ReadAsStringAsync()
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
-                if (!string.IsNullOrWhiteSpace(responseContentAsString))
-                {
-                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(responseContentAsString);
-                }
-            }
-            catch (Exception e)
-            {
-                return new Response
-                {
-                    Success = false,
-                    Status = response?.StatusCode ?? HttpStatusCode.BadRequest,
-                    Exception = e,
-                    Content = responseContentAsString
-                };
-            }
-
-            if (response == null)
-            {
-                return new Response
-                {
-                    Success = false,
-                    Exception = new Exception("Failed sending data")
-                };
-            }
-
-            var statusCode = ingestResponse?.Status ?? response.StatusCode;
-
-            return new Response
-            {
-                Message = ingestResponse?.Message,
-                Errors = ingestResponse?.Errors,
-                ErrorCode = ingestResponse?.ErrorCode,
-                Status = statusCode,
-                Success = response.IsSuccessStatusCode,
-                Content = responseContentAsString
-            };
+            return Ingest(entity, "2", connection);
         }
 
         public Response Ingest<T>(IEnterspeedEntity<T> entity, IEnterspeedConnection connection)
+        {
+            return Ingest(entity, _configurationProvider.Configuration.IngestVersion, connection);
+        }
+
+        private Response Ingest<T>(IEnterspeedEntity<T> entity, string ingestVersion, IEnterspeedConnection connection)
         {
             if (entity == null)
             {
@@ -187,13 +133,25 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             string responseContentAsString = null;
             try
             {
-                var content = _jsonSerializer.Serialize(entity);
+                string jsonEntityToIngest;
+                string ingestUrl;
+                if (ingestVersion == "1")
+                {
+                    jsonEntityToIngest = _jsonSerializer.Serialize(entity);
+                    ingestUrl = _ingestEndpoint;
+                }
+                else
+                {
+                    var enterspeedEntityV2 = new EnterspeedEntityV2<T>(entity);
+                    jsonEntityToIngest = _jsonSerializer.Serialize(enterspeedEntityV2);
+                    ingestUrl = $"{_ingestEndpointV2}/{entity.Id}";
+                }
 
-                var buffer = Encoding.UTF8.GetBytes(content);
+                var buffer = Encoding.UTF8.GetBytes(jsonEntityToIngest);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
+                response = connection.HttpClientConnection.PostAsync(ingestUrl, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
