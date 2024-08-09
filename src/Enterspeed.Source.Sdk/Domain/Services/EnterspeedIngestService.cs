@@ -7,7 +7,6 @@ using System.Text;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
 
@@ -17,18 +16,13 @@ namespace Enterspeed.Source.Sdk.Domain.Services
     {
         private readonly IEnterspeedConnection _connection;
         private readonly IJsonSerializer _jsonSerializer;
-        private readonly string _ingestEndpoint;
-        private readonly string _ingestEndpointV2;
 
         public EnterspeedIngestService(
             IEnterspeedConnection connection,
-            IJsonSerializer jsonSerializer,
-            IEnterspeedConfigurationProvider configurationProvider)
+            IJsonSerializer jsonSerializer)
         {
             _connection = connection;
             _jsonSerializer = jsonSerializer;
-            _ingestEndpoint = $"/ingest/v{configurationProvider.Configuration.IngestVersion}";
-            _ingestEndpointV2 = "/ingest/v2";
         }
 
         public Response Save(IEnterspeedEntity entity)
@@ -88,89 +82,28 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             // This was the default approach. We expect that everything is taken care of here.
             if (entity.Properties is IDictionary<string, IEnterspeedProperty>)
             {
-                return Ingest(entity, connection);
+                return Ingest(entity, IngestVersion.V1, connection);
             }
 
-            object ingestEntity = entity;
             // If properties is of type string, we expect a json string that we do not want to serialize once again
             // so we create a new entity with the deserialized properties as a Dictionary<string, object>
             if (entity.Properties is string entityProperties)
             {
                 var properties = _jsonSerializer.Deserialize<IDictionary<string, object>>(entityProperties);
-                ingestEntity = new EnterspeedEntity<object>(entity.Id, entity.Type, properties)
+                var ingestEntity = new EnterspeedEntity<object>(entity.Id, entity.Type, properties)
                 {
                     Url = entity.Url,
                     Redirects = entity.Redirects,
                     ParentId = entity.ParentId
                 };
 
-                var serializedEntity = _jsonSerializer.Serialize(ingestEntity);
-                return Ingest(serializedEntity, $"{_ingestEndpointV2}/{entity.Id}", connection);
+                return Ingest(ingestEntity, IngestVersion.V2, connection);
             }
 
-            return Ingest(_jsonSerializer.Serialize(ingestEntity), $"{_ingestEndpointV2}/{entity.Id}", connection);
+            return Ingest(entity, IngestVersion.V2, connection);
         }
 
-        private Response Ingest(string jsonEntityToIngest, string ingestUrl, IEnterspeedConnection connection)
-        {
-            HttpResponseMessage response = null;
-            IngestResponse ingestResponse = null;
-            string responseContentAsString = null;
-            try
-            {
-                var buffer = Encoding.UTF8.GetBytes(jsonEntityToIngest);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                response = connection.HttpClientConnection.PostAsync(ingestUrl, byteContent)
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
-
-                responseContentAsString = response?.Content
-                    .ReadAsStringAsync()
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
-                if (!string.IsNullOrWhiteSpace(responseContentAsString))
-                {
-                    ingestResponse = _jsonSerializer.Deserialize<IngestResponse>(responseContentAsString);
-                }
-            }
-            catch (Exception e)
-            {
-                return new Response
-                {
-                    Success = false,
-                    Status = response?.StatusCode ?? HttpStatusCode.BadRequest,
-                    Exception = e,
-                    Content = responseContentAsString
-                };
-            }
-
-            if (response == null)
-            {
-                return new Response
-                {
-                    Success = false,
-                    Exception = new Exception("Failed sending data")
-                };
-            }
-
-            var statusCode = ingestResponse?.Status ?? response.StatusCode;
-
-            return new Response
-            {
-                Message = ingestResponse?.Message,
-                Errors = ingestResponse?.Errors,
-                ErrorCode = ingestResponse?.ErrorCode,
-                Status = statusCode,
-                Success = response.IsSuccessStatusCode,
-                Content = responseContentAsString
-            };
-        }
-
-        public Response Ingest<T>(IEnterspeedEntity<T> entity, IEnterspeedConnection connection)
+        private Response Ingest<T>(IEnterspeedEntity<T> entity, IngestVersion ingestVersion, IEnterspeedConnection connection)
         {
             if (entity == null)
             {
@@ -187,13 +120,25 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             string responseContentAsString = null;
             try
             {
-                var content = _jsonSerializer.Serialize(entity);
+                string jsonEntityToIngest;
+                string ingestUrl;
+                if (ingestVersion == IngestVersion.V1)
+                {
+                    jsonEntityToIngest = _jsonSerializer.Serialize(entity);
+                    ingestUrl = GetIngestUrl(IngestVersion.V1);
+                }
+                else
+                {
+                    var enterspeedEntityV2 = new EnterspeedEntityV2<T>(entity);
+                    jsonEntityToIngest = _jsonSerializer.Serialize(enterspeedEntityV2);
+                    ingestUrl = GetIngestUrl(IngestVersion.V2, entity.Id);
+                }
 
-                var buffer = Encoding.UTF8.GetBytes(content);
+                var buffer = Encoding.UTF8.GetBytes(jsonEntityToIngest);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                response = connection.HttpClientConnection.PostAsync(_ingestEndpoint, byteContent)
+                response = connection.HttpClientConnection.PostAsync(ingestUrl, byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -262,7 +207,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
             try
             {
                 response = connection.HttpClientConnection
-                    .DeleteAsync($"{_ingestEndpoint}?id={id}")
+                    .DeleteAsync(GetIngestUrl(IngestVersion.V2, id))
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -307,7 +252,7 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 response = _connection.HttpClientConnection
-                    .PostAsync(_ingestEndpoint, byteContent)
+                    .PostAsync(GetIngestUrl(IngestVersion.V2, "123"), byteContent)
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
@@ -337,6 +282,20 @@ namespace Enterspeed.Source.Sdk.Domain.Services
                 Status = statusCode,
                 Success = response.IsSuccessStatusCode
             };
+        }
+
+        private static string GetIngestUrl(IngestVersion version, string sourceEntityId = null)
+        {
+            var ingestUrl = $"/ingest/v{(int)version}";
+
+            if (!string.IsNullOrWhiteSpace(sourceEntityId))
+            {
+                ingestUrl += version == IngestVersion.V1
+                    ? $"?id={sourceEntityId}"
+                    : $"/{sourceEntityId}";
+            }
+
+            return ingestUrl;
         }
     }
 }
