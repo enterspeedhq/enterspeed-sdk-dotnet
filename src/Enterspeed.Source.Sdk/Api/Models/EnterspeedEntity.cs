@@ -33,4 +33,24 @@
             Properties = properties;
         }
     }
+
+    internal class EnterspeedEntityV2<T> : IEnterspeedEntityV2<T>
+    {
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public string Url { get; set; }
+        public string[] Redirects { get; set; }
+        public string OriginParentId { get; set; }
+        public T Properties { get; set; }
+
+        public EnterspeedEntityV2(IEnterspeedEntity<T>  enterspeedEntity)
+        {
+            Id = enterspeedEntity.Id;
+            Type = enterspeedEntity.Type;
+            Url = enterspeedEntity.Url;
+            Redirects = enterspeedEntity.Redirects;
+            OriginParentId = enterspeedEntity.ParentId;
+            Properties = enterspeedEntity.Properties;
+        }
+    }
 }

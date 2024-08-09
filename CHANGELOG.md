@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [2.0.2 - 2024-08-09]
+### Fixed
+- `parentId` on ingested source entity is only saved if `properties` is of type `IDictionary<string, IEnterspeedProperty>`
+
 ## [2.0.1 - 2023-12-11]
 ### Changed
 - Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 8
