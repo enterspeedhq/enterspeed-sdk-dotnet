@@ -45,7 +45,7 @@ namespace Enterspeed.Source.Sdk.Domain.Connection
 
         public void Dispose()
         {
-            _httpClientConnection.Dispose();
+            _httpClientConnection?.Dispose();
         }
 
         private void Connect()
