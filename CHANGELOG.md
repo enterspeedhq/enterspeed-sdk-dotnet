@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [UNRELEASED]
+## [2.0.3 - 2024-10-14]
 ### Fixed
 - Fixed a potential null reference exception in `EnterspeedConnection` when not used before it's disposed again (contribution by [Marcin-Niznik](https://github.com/Marcin-Niznik))
 
