@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [2.0.3 - 2024-10-14]
+### Fixed
+- Fixed a potential null reference exception in `EnterspeedConnection` when not used before it's disposed again (contribution by [Marcin-Niznik](https://github.com/Marcin-Niznik))
+
 ## [2.0.2 - 2024-08-09]
 ### Fixed
 - `parentId` on ingested source entity is only saved if `properties` is of type `IDictionary<string, IEnterspeedProperty>`
