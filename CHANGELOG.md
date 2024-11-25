@@ -6,8 +6,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [2.0.4 - 2024-11-22]
 ### Changed
-- Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 8
-- Updated dependency on `System.Text.Json` to version 8
+- Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 9
+- Updated dependency on `System.Text.Json` to version 9
 
 ## [2.0.3 - 2024-10-14]
 ### Fixed
