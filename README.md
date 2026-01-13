@@ -71,6 +71,77 @@ public class IngestService
 }
 ````
 
+## Bulk Operations
+
+For improved performance when ingesting or deleting multiple entities, use the bulk operation methods:
+
+### Bulk Ingest
+
+````csharp
+using Enterspeed.Source.Sdk.Api.Models.Bulk;
+
+var entities = new List<BulkIngestEntity>
+{
+    new BulkIngestEntity
+    {
+        OriginId = "product-123",
+        Type = "product",
+        Url = "/products/product-123",
+        Properties = new Dictionary<string, object>
+        {
+            ["name"] = "Example Product",
+            ["price"] = 99.99,
+            ["inStock"] = true
+        }
+    },
+    new BulkIngestEntity
+    {
+        OriginId = "product-124",
+        Type = "product",
+        Properties = new Dictionary<string, object>
+        {
+            ["name"] = "Another Product",
+            ["price"] = 149.99
+        }
+    }
+};
+
+var response = _enterspeedIngestService.SaveBulk(entities);
+
+if (response.IsFullSuccess)
+{
+    Console.WriteLine($"Successfully ingested {response.SuccessCount} entities");
+    Console.WriteLine($"Changed: {response.ChangedSourceEntities.Count}, Unchanged: {response.UnchangedSourceEntities.Count}");
+}
+else if (response.IsPartialSuccess)
+{
+    Console.WriteLine($"Partial success: {response.SuccessCount} succeeded, {response.ErrorCount} failed");
+    foreach (var failedId in response.FailedOriginIds)
+    {
+        var errors = response.GetErrorsForOriginId(failedId);
+        Console.WriteLine($"{failedId}: {string.Join(", ", errors)}");
+    }
+}
+````
+
+### Bulk Delete
+
+````csharp
+var originIds = new[] { "product-123", "product-124", "product-125" };
+var response = _enterspeedIngestService.DeleteBulk(originIds);
+
+Console.WriteLine($"Deleted: {response.DeletedSourceEntities.Count}");
+Console.WriteLine($"Not found: {response.NotFoundSourceEntities.Count}");
+Console.WriteLine($"Errors: {response.ErrorCount}");
+````
+
+**Important Notes:**
+- Bulk operations require the `IsAsyncBulkProcessingEnabled` feature flag on your tenant
+- Maximum 50 entities per request (configurable per tenant)
+- Maximum request size: 210MB (configurable per tenant)
+- Partial success is supported - some entities may succeed while others fail
+- Bulk operations provide 10-20x performance improvement over sequential single operations
+
 ## Documentation
 
 If you need more in depth details, please look through our documentation:  

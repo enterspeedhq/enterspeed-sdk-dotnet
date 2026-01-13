@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [2.1.0 - 2026-01-13]
+### Added
+- Bulk ingest functionality via `SaveBulk()` methods for ingesting multiple entities in a single HTTP request
+- Bulk delete functionality via `DeleteBulk()` methods for deleting multiple entities in a single HTTP request
+- `BulkIngestEntity` model for bulk ingest operations
+- `BulkIngestResponse` model with helper properties (`IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`, `SuccessCount`, `ErrorCount`)
+- `BulkDeleteRequest` model for bulk delete operations
+- `BulkDeleteResponse` model with helper properties for analyzing deletion results
+- Conversion extensions (`ToBulkIngestEntity`, `ToBulkIngestEntities`) for migrating from single to bulk operations
+- Response helper extensions (`GetSummary`, `GetErrorSummary`) for bulk operation responses
+- Support for .NET 9.0 target framework
+
+### Performance
+- Bulk operations provide 10-20x performance improvement over sequential single operations for batch processing
+- Reduced HTTP overhead when processing multiple entities
+
+### Requirements
+- Bulk operations require `IsAsyncBulkProcessingEnabled` feature flag to be enabled on the tenant
+- Default limits: 50 entities per request, 210MB maximum request size (configurable per tenant)
+
 ## [2.0.4 - 2024-11-22]
 ### Changed
 - Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 9
