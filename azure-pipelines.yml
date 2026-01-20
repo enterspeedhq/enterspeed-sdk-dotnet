@@ -2,7 +2,7 @@ variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   majorVersion: 2
   minorVersion: 0
-  patchVersion: 4
+  patchVersion: 5
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     releaseOnNuget: true
@@ -67,6 +67,12 @@ stages:
             inputs:
               packageType: sdk
               version: "6.0.x"
+
+          - task: UseDotNet@2
+            displayName: Install .NET 9.0 SDK
+            inputs:
+              packageType: sdk
+              version: "9.0.x"
 
           # NuGet
           - task: NuGetToolInstaller@1

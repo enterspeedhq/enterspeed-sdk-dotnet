@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [2.0.5 - 2026-01-20]
+### Added
+- Bulk ingest endpoint support for batch ingesting multiple source entities
+  - `SaveBulkAsync()` method with two overloads (with and without connection parameter)
+  - `BulkIngestRequest` model for individual entity data in bulk requests
+  - `BulkIngestResponse` model with ChangedSourceEntities, UnchangedSourceEntities, and Errors
+  - Partial success handling with individual entity validation and error reporting
+  - Support for up to 50 entities per request
+  - Helper properties on response: `IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`
+
+- Bulk delete endpoint support for batch deleting multiple source entities
+  - `DeleteBulkAsync()` method with multiple overloads for flexible usage
+  - `BulkDeleteRequest` model for specifying entities to delete
+  - `BulkDeleteResponse` model with DeletedSourceEntities, NotFoundSourceEntities, and Errors
+  - Partial success handling with deletion tracking (deleted vs not found)
+  - Support for up to 50 entities per request
+  - Helper properties on response: `IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`
+
+### Changed
+- Updated target frameworks to include .NET 9.0
+
 ## [2.0.4 - 2024-11-22]
 ### Changed
 - Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 9
