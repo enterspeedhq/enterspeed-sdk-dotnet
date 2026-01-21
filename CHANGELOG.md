@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [2.1.0 - 2026-01-13]
+## [2.0.6 - 2026-01-21]
 ### Added
 - Bulk ingest functionality via `SaveBulk()` methods for ingesting multiple entities in a single HTTP request
 - Bulk delete functionality via `DeleteBulk()` methods for deleting multiple entities in a single HTTP request
@@ -15,6 +15,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Conversion extensions (`ToBulkIngestEntity`, `ToBulkIngestEntities`) for migrating from single to bulk operations
 - Response helper extensions (`GetSummary`, `GetErrorSummary`) for bulk operation responses
 - Support for .NET 9.0 target framework
+
+### Fixed
+- Azure Pipeline now uses ubuntu-22.04 for NuGet release to ensure Mono compatibility
 
 ### Performance
 - Bulk operations provide 10-20x performance improvement over sequential single operations for batch processing
