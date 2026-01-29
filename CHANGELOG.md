@@ -6,15 +6,13 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [2.0.6 - 2026-01-21]
 ### Added
-- Bulk ingest functionality via `SaveBulk()` methods for ingesting multiple entities in a single HTTP request
-- Bulk delete functionality via `DeleteBulk()` methods for deleting multiple entities in a single HTTP request
-- `BulkIngestEntity` model for bulk ingest operations
-- `BulkIngestResponse` model with helper properties (`IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`, `SuccessCount`, `ErrorCount`)
-- `BulkDeleteRequest` model for bulk delete operations
-- `BulkDeleteResponse` model with helper properties for analyzing deletion results
-- Conversion extensions (`ToBulkIngestEntity`, `ToBulkIngestEntities`) for migrating from single to bulk operations
-- Response helper extensions (`GetSummary`, `GetErrorSummary`) for bulk operation responses
-- Support for .NET 9.0 target framework
+- Bulk ingest endpoint support for batch ingesting multiple source entities
+  - `SaveBulkAsync()` method with two overloads (with and without connection parameter)
+  - `BulkIngestRequest` model for individual entity data in bulk requests
+  - `BulkIngestResponse` model with ChangedSourceEntities, UnchangedSourceEntities, and Errors
+  - Partial success handling with individual entity validation and error reporting
+  - Support for up to 50 entities per request
+  - Helper properties on response: `IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`
 
 ### Fixed
 - Azure Pipeline now uses ubuntu-22.04 for NuGet release to ensure Mono compatibility
@@ -23,9 +21,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Bulk operations provide 10-20x performance improvement over sequential single operations for batch processing
 - Reduced HTTP overhead when processing multiple entities
 
-### Requirements
-- Bulk operations require `IsAsyncBulkProcessingEnabled` feature flag to be enabled on the tenant
-- Default limits: 50 entities per request, 210MB maximum request size (configurable per tenant)
+### Changed
+- Updated target frameworks to include .NET 9.0
 
 ## [2.0.4 - 2024-11-22]
 ### Changed
