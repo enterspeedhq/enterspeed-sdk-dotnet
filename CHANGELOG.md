@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [2.0.5 - 2026-01-20]
+## [2.0.6 - 2026-01-21]
 ### Added
 - Bulk ingest endpoint support for batch ingesting multiple source entities
   - `SaveBulkAsync()` method with two overloads (with and without connection parameter)
@@ -14,13 +14,12 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
   - Support for up to 50 entities per request
   - Helper properties on response: `IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`
 
-- Bulk delete endpoint support for batch deleting multiple source entities
-  - `DeleteBulkAsync()` method with multiple overloads for flexible usage
-  - `BulkDeleteRequest` model for specifying entities to delete
-  - `BulkDeleteResponse` model with DeletedSourceEntities, NotFoundSourceEntities, and Errors
-  - Partial success handling with deletion tracking (deleted vs not found)
-  - Support for up to 50 entities per request
-  - Helper properties on response: `IsFullSuccess`, `IsPartialSuccess`, `IsFullFailure`
+### Fixed
+- Azure Pipeline now uses ubuntu-22.04 for NuGet release to ensure Mono compatibility
+
+### Performance
+- Bulk operations provide 10-20x performance improvement over sequential single operations for batch processing
+- Reduced HTTP overhead when processing multiple entities
 
 ### Changed
 - Updated target frameworks to include .NET 9.0
