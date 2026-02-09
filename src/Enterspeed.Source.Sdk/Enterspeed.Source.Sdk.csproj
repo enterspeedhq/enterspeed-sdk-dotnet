@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>NU1903;NU1904</NoWarn>
     <PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</PackageProjectUrl>
     <RepositoryType>https://github.com/enterspeedhq/enterspeed-sdk-dotnet</RepositoryType>
     <PackageTags>Enterspeed, SDK, Ingest</PackageTags>
