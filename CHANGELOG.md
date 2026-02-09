@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [2.0.7 - 2026-02-09]
+### Added
+- Added support for .NET 10
+
+### Changed
+- Updated dependency on `Microsoft.Extensions.DependencyInjection.Abstractions` to version 10 for .NET 10 target
+- Updated dependency on `System.Text.Json` to version 10 for .NET 10 target
+
 ## [2.0.6 - 2026-01-21]
 ### Added
 - Bulk ingest endpoint support for batch ingesting multiple source entities
