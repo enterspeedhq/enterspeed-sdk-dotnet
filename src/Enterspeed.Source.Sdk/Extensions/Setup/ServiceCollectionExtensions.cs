@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0 || NET6_0
+﻿#if NETSTANDARD2_0 || NET6_0_OR_GREATER
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;

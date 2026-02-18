@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0 || NET6_0
+﻿#if NETSTANDARD2_0 || NET6_0_OR_GREATER
 using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Services;
 namespace Enterspeed.Source.Sdk.Domain.SystemTextJson
